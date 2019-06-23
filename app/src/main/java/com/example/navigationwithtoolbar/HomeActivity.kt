@@ -22,6 +22,6 @@ class HomeActivity : AppCompatActivity() {
         topToolbar.setupWithNavController(navControler)
         navControler.addOnDestinationChangedListener { controller, destination, arguments ->
         }
-
+        //did it comit
     }
 }
