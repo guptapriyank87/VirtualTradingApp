@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#115F12</color>
+    <color name="colorPrimaryDark">#FCBBD2FF</color>
+    <color name="colorAccent">#797979</color>
+    <color name="iconColor">#383838</color>
+    <color name="strongBuy">#00CC00</color>
+    <color name="buy">#005100</color>
+    <color name="sell">#660000</color>
+    <color name="strongSell">#CC0000</color>
+    <color name="neutral">#0454D5</color>
+    <color name="cardView">#FFD8FA</color>
+    <color name="buttonBackground">#2B0000</color>
+
+
+</resources>

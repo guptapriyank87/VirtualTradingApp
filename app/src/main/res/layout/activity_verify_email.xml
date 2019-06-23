@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VerifyEmail">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:srcCompat="@drawable/email_300dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="150dp"
+            android:alpha="0.9"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textStyle="bold|italic"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:lineSpacingExtra="15dp"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="#582020"
+            android:text="A verification link has been sent to your email address \n Please verify your email to log in"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnVGoBackToLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:theme="@style/Theme.MaterialComponents.DayNight"
+            android:layout_marginTop="110dp"
+            android:layout_gravity="center"
+            android:textColor="@color/design_default_color_surface"
+            android:background="@drawable/button_bg"
+            />
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
