@@ -36,7 +36,7 @@ import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+//TODO:App is crashing on click on SignUp button with an error message Attempt to invoke virtual method 'int java.lang.String.length()' on a null object reference
 public class SignUp extends AppCompatActivity {
 
     private String TAG = "SignUpActivity";
