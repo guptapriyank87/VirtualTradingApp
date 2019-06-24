@@ -12,16 +12,12 @@ import kotlinx.android.synthetic.main.activity_home.*
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var navControler :NavController
-    private lateinit var topToolbar: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         setSupportActionBar(topToolbar)
         navControler = Navigation.findNavController(this,R.id.fragment)
         bottomNav.setupWithNavController(navControler)
-        topToolbar.setupWithNavController(navControler)
-        navControler.addOnDestinationChangedListener { controller, destination, arguments ->
-        }
 
     }
 }

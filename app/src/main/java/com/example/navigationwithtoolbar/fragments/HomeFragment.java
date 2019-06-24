@@ -43,7 +43,6 @@ public class HomeFragment extends Fragment {
     ProductAdapter productAdapter;
     List<Product> productList;
     SwipeRefreshLayout swipeRefreshLayout;
-    private Handler mHandler = new Handler(Looper.getMainLooper());
     View v;
 
 
@@ -71,14 +70,20 @@ public class HomeFragment extends Fragment {
         return v;
     }
     public void fetcIt(){
-        DataFetcher dataFetcher = new DataFetcher(getActivity());
-        dataFetcher.execute("fetchdata");
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                DataFetcher dataFetcher = new DataFetcher(getActivity());
+                dataFetcher.execute("fetchdata");
+            }
+        });
+
     }
     public class DataFetcher extends AsyncTask<String,String,String> {
         Context context;
         String c,p,s;
         public List<Product> productList;
-        String ip = "192.168.1.4";
+        String ip = "192.168.43.216";
         private Handler mHandler = new Handler(Looper.getMainLooper());
 
         @Override
@@ -86,7 +91,12 @@ public class HomeFragment extends Fragment {
             String type = strings[0];
             String fetchData_url = "http://"+ip+"/pgr/fetchdata.php";
             productList = new ArrayList<>();
-            swipeRefreshLayout.setRefreshing(true);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+            });
             if (type.equals("fetchdata")){
                 try {
                     URL url = new URL(fetchData_url);
@@ -102,17 +112,37 @@ public class HomeFragment extends Fragment {
                     inputStream.close();
                     httpURLConnection.disconnect();
                     System.out.println(result);
-                    swipeRefreshLayout.setRefreshing(false);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
                     return result;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
-                    swipeRefreshLayout.setRefreshing(false);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
-                    swipeRefreshLayout.setRefreshing(false);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
                 }
             }
-            swipeRefreshLayout.setRefreshing(false);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
             return "error";
         }
 
@@ -138,8 +168,14 @@ public class HomeFragment extends Fragment {
                     s = jsonObj.getString("status");
                     productList.add(new Product(c,"INR "+p,s));
                 }
-                productAdapter =new ProductAdapter(getActivity(),productList);
-                recyclerView.setAdapter(productAdapter);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        productAdapter =new ProductAdapter(getActivity(),productList);
+                        recyclerView.setAdapter(productAdapter);
+                    }
+                });
+
             }catch (Exception e){
                 e.printStackTrace();
             }

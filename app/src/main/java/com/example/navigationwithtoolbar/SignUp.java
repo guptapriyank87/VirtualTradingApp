@@ -12,6 +12,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -19,7 +21,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.widget.AppCompatButton;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -53,10 +55,6 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         dateTextView = findViewById(R.id.selectDate);
 
-
-        Button btn;
-
-
         name = findViewById(R.id.etrname);
         email = findViewById(R.id.etremail);
         number = findViewById(R.id.etrphone);
@@ -65,7 +63,7 @@ public class SignUp extends AppCompatActivity {
         password = findViewById(R.id.etrpassword);
         confirmPassword = findViewById(R.id.etrconfirmpassword);
         date = "Select Date of Birth";
-        btn = findViewById(R.id.verifyIntent);
+
 
         dateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,17 +103,21 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View v) {
                 if (name.getText().toString().trim().equalsIgnoreCase("")) {
                     name.setError("Name Required");
+                    name.requestFocus();
                     return;
                 }
                 if (email.getText().toString().trim().equalsIgnoreCase("")) {
                     email.setError("Email Required");
+                    email.requestFocus();
                     return;
                 } else if (!isEmailValid(email.getText().toString())) {
                     email.setError("Valid email is required");
+                    email.requestFocus();
                     return;
                 }
                 if (number.getText().length() < 10) {
                     number.setError("Valid phone number is required");
+                    number.requestFocus();
                     return;
                 }
                 String value = "No value";
@@ -144,11 +146,14 @@ public class SignUp extends AppCompatActivity {
                 if (password.getText().toString().length() > 0) {
                     if (password.getText().toString().length() < 8) {
                         password.setError("Password must be of minimum 8 characters");
+                        password.requestFocus();
                     } else if (!password.getText().toString().equals(confirmPassword.getText().toString())) {
                         confirmPassword.setError("Password does not match");
+                        confirmPassword.requestFocus();
                     }
                 } else {
                     password.setError("This field can not be empty");
+                    password.requestFocus();
                     return;
                 }
 
@@ -159,31 +164,12 @@ public class SignUp extends AppCompatActivity {
                 stringPassword = password.getText().toString();
                 stringGender = getMF();
                 stringPhone = number.getText().toString();
-
                 Log.i("Variables", stringName + "   " + stringEmail + "   " + stringPhone + "   " + stringGender + "   " + date + "   " + stringPassword);
-
-                try {
-                    backgroundWorker.execute("checkUserExist", stringEmail);
-                    if (backgroundWorker.ifUserExist()) {
-                        return;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
                 if (date.equals("Select Date of Birth")) {
                     Toast.makeText(SignUp.this, "Please select your DOB", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-                Intent in = new Intent(SignUp.this, VerifyEmail.class);
-                in.putExtra("name", stringName);
-                in.putExtra("email", stringEmail);
-                in.putExtra("phone", stringPhone);
-                in.putExtra("gender", stringGender);
-                in.putExtra("dob", date);
-                in.putExtra("password", stringPassword);
-                startActivity(in);
+                backgroundWorker.execute("register", stringName,stringEmail,stringPhone,stringGender,stringDob,stringPassword);
             }
         });
     }
@@ -226,62 +212,15 @@ public class SignUp extends AppCompatActivity {
         Context context;
         AlertDialog alertDialog;
 
-        Boolean signupSuccess=false,userExist=false;
-        String ip = "192.168.1.4";
+        Boolean userExist=false;
+        String ip = "192.168.43.216";
         @Override
         protected String doInBackground(String... strings) {
             String type = strings[0];
             String register_url = "http://"+ip+"/pgr/register.php";
             String userexist_url = "http://"+ip+"/pgr/userexist.php";
 
-            if (type.equals("checkUserExist")){
-                try {
-                    String email = strings[1];
-                    Log.i("status","inside the login try catch");
-                    URL url = new URL(userexist_url);
-                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.setDoOutput(true);
-                    httpURLConnection.setDoOutput(true);
-                    Log.i("status","Http url connection established properly");
-
-                    OutputStream outputStream = httpURLConnection.getOutputStream();
-
-                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                    Log.i("status","buffer writer working");
-
-                    String post_data = URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8");
-                    Log.i("status","string post_data concatenation successful");
-
-                    bufferedWriter.write(post_data);
-                    Log.i("status","bufferedWriter.write(post_data) executed successfully");
-
-                    bufferedWriter.flush();
-                    bufferedWriter.close();
-                    outputStream.close();
-
-                    //reading response for feedback
-                    Log.i("status","now reading feedback");
-
-
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
-                    String result = "";
-                    String line  = "";
-                    while ((line = bufferedReader.readLine())!=null){
-                        result += line;
-                    }
-                    bufferedReader.close();
-                    inputStream.close();
-                    httpURLConnection.disconnect();
-                    System.out.println(result);
-                    return result;
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else if (type.equals("register")){
+            if (type.equals("register")){
                 try {
                     String name = strings[1];
                     String email = strings[2];
@@ -359,17 +298,13 @@ public class SignUp extends AppCompatActivity {
             try {
                boolean insertSuccessful = s.contains("insertsuccessful");
                 boolean insertUnsuccessful = s.contains("insertunsuccessful");
-                boolean deleteSuccessful = s.contains("deletesuccessful");
                 boolean userExist = s.contains("userExist");
 
                 if (insertSuccessful) {
-                    signupSuccess = true;
+                    context.startActivity(new Intent(SignUp.this,VerifyEmail.class));
                 } else if (insertUnsuccessful) {
                     alertDialog.setMessage("Sorry, Something went wrong!");
-                } else if (deleteSuccessful) {
-                    alertDialog.setMessage("Delete successful!");
                 } else if (userExist) {
-                    userExist = true;
                     alertDialog.setMessage("Email already registered!");
                 } else {
                     alertDialog.setMessage("Unknown error!");
@@ -384,13 +319,6 @@ public class SignUp extends AppCompatActivity {
 
         public BackgroundWorker(Context ctx) {
             context = ctx;
-        }
-        public Boolean ifSignUpSuccess(){
-            if(signupSuccess==true){
-                return true;
-            }else {
-                return false;
-            }
         }
         public Boolean ifUserExist(){
             if(userExist==true){

@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     public static class BackgroundWorker extends AsyncTask<String, String, String> {
         Context context;
         AlertDialog alertDialog;
-        String ip = "192.168.1.4";
+        String ip = "192.168.43.216";
         boolean loginStatus = false;
         String user = "nouser";
 
