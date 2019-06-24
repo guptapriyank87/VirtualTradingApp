@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
@@ -28,7 +29,7 @@ import java.net.URLEncoder;
 
 public class MainActivity extends AppCompatActivity {
 
-    MaterialButton loginButton;
+    Button loginButton;
     TextView signupButton;
     TextView btnForgotPassword;
     EditText etusername,etpassword;

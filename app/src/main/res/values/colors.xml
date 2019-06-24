@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#115F12</color>
-    <color name="colorPrimaryDark">#FCBBD2FF</color>
+    <color name="colorPrimaryDark">#115F12</color>
     <color name="colorAccent">#797979</color>
     <color name="iconColor">#383838</color>
     <color name="strongBuy">#00CC00</color>

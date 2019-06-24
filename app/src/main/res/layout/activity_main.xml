@@ -19,7 +19,7 @@
             android:id="@+id/textViewOTP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
@@ -31,7 +31,7 @@
             android:id="@+id/etemail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:ems="10"
@@ -44,7 +44,7 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
@@ -55,14 +55,16 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            >
+
 
             <EditText
                 android:id="@+id/etpassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:ems="10"
@@ -72,7 +74,7 @@
                 android:id="@+id/btnforgetpassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_horizontal"
+                android:layout_gravity="end|center_horizontal"
                 android:layout_marginEnd="10dp"
                 android:text="Forgot?"
                 android:layout_marginTop="10dp"
@@ -80,7 +82,7 @@
                 android:textSize="18sp"
                 android:textStyle="italic" />
         </FrameLayout>
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnlogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -89,6 +91,7 @@
         android:layout_marginLeft="10dp"
         android:layout_gravity="center_horizontal"
         android:text="Sign in"
+        android:background="@drawable/button_background"
         android:textColor="#FFFFFF"
         />
     <TextView
