@@ -5,14 +5,32 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
     android:fitsSystemWindows="true"
-    tools:layout_editor_absoluteX="8dp"
-    tools:layout_editor_absoluteY="8dp">
+    >
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/topToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme"
+        app:menu="@menu/top_menu"
+        app:title="Nifty50"
+        app:logo="@drawable/ic_menu"
+        android:elevation="10dp"
+        app:titleMarginStart="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"/>
+
+    <LinearLayout
+        android:layout_margin="8dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/topToolbar"
+        >
 
 
 
-    <FrameLayout
+        <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,23 +38,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Nifty50"
-            android:textColor="#00443D"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
     </FrameLayout>
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         app:layout_constraintTop_toBottomOf="@+id/frameLayout"
         android:id="@+id/refreshLayout"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
@@ -50,6 +58,7 @@
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

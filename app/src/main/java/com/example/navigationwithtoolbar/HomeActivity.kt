@@ -15,7 +15,6 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        setSupportActionBar(topToolbar)
         navControler = Navigation.findNavController(this,R.id.fragment)
         bottomNav.setupWithNavController(navControler)
 

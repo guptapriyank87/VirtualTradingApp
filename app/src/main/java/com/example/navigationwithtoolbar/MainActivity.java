@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(in);
         }
-        if (false){
+        if (true){
             Intent in = new Intent(MainActivity.this,HomeActivity.class);
             in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(in);
