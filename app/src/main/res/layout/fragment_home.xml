@@ -7,25 +7,12 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     >
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/topToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme"
-        app:menu="@menu/top_menu"
-        app:title="Nifty50"
-        app:logo="@drawable/ic_menu"
-        android:elevation="10dp"
-        app:titleMarginStart="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"/>
-
     <LinearLayout
         android:layout_margin="8dp"
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/topToolbar"
         >
 
 
@@ -44,7 +31,6 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         app:layout_constraintTop_toBottomOf="@+id/frameLayout"
         android:id="@+id/refreshLayout"
-        android:layout_marginTop="50dp"
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
