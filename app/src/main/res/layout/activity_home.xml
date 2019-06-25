@@ -9,16 +9,7 @@
         android:layout_height="match_parent"
         tools:context=".HomeActivity">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/topToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme"
-            app:menu="@menu/top_menu"
-            app:title="StockMarket"
-            app:logo="@drawable/ic_menu"
-            android:elevation="10dp"
-            app:titleMarginStart="30dp" />
+
         <fragment
             android:id="@+id/fragment"
             android:layout_width="match_parent"

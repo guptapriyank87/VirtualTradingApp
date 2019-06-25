@@ -5,6 +5,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +17,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -69,6 +74,12 @@ public class HomeFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_home, container, false);
         return v;
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     public void fetcIt(){
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -84,7 +95,7 @@ public class HomeFragment extends Fragment {
         String c,p,s;
         public List<Product> productList;
         String ip = "192.168.43.216";
-        private Handler mHandler = new Handler(Looper.getMainLooper());
+
 
         @Override
         protected String doInBackground(String... strings) {

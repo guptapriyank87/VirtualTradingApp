@@ -15,6 +15,5 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         navControler = Navigation.findNavController(this,R.id.fragment)
         bottomNav.setupWithNavController(navControler)
-
     }
 }

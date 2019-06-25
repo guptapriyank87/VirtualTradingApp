@@ -34,59 +34,54 @@ public class MainActivity extends AppCompatActivity {
     TextView btnForgotPassword;
     EditText etusername,etpassword;
     Boolean homeCode = false;
-    public static final String SHARED_PREFS = "sharedPrefs";
     public static final String SESSION_ID= null;
-    public static final String SESSION_USER = null;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (SESSION_ID != null){
+        Constants constants = new Constants(MainActivity.this);
+        if (constants.getEmail()!=""){
             Intent in = new Intent(MainActivity.this,HomeActivity.class);
             in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.overridePendingTransition(0,0);
             startActivity(in);
+        }else {
+            setContentView(R.layout.activity_main);
+            signupButton = findViewById(R.id.btnsignup);
+            etusername = findViewById(R.id.etemail);
+            etpassword = findViewById(R.id.etpassword);
+            loginButton = findViewById(R.id.btnlogin);
+            btnForgotPassword = findViewById(R.id.btnforgetpassword);
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent in = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(in);
+                }
+            });
+            signupButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent in = new Intent(MainActivity.this, SignUp.class);
+                    startActivity(in);
+                }
+            });
+            btnForgotPassword.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent in = new Intent(MainActivity.this, ForgetPassword.class);
+                    startActivity(in);
+                }
+            });
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    logIn();
+                }
+            });
         }
-        if (true){
-            Intent in = new Intent(MainActivity.this,HomeActivity.class);
-            in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(in);
-        }
-        setContentView(R.layout.activity_main);
-        setContentView(R.layout.activity_main);
-        signupButton = findViewById(R.id.btnsignup);
-        etusername = findViewById(R.id.etemail);
-        etpassword = findViewById(R.id.etpassword);
-        loginButton = findViewById(R.id.btnlogin);
-        btnForgotPassword = findViewById(R.id.btnforgetpassword);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(MainActivity.this,HomeActivity.class);
-                startActivity(in);
-            }
-        });
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(MainActivity.this,SignUp.class);
-                startActivity(in);
-            }
-        });
-        btnForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(MainActivity.this,ForgetPassword.class);
-                startActivity(in);
-            }
-        });
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logIn();
-            }
-        });
-
 
     }
     public void logIn(){
@@ -198,14 +193,8 @@ public class MainActivity extends AppCompatActivity {
                     //Generating SESSION_ID
                     s = s.replace("loginsuccess","");
 
-                   /* SharedPreferences Pref = context.getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                    SharedPreferences.Editor Editor = Pref.edit();
-                    Editor.putString("SESSION_ID",s);
-                    Editor.putString("SESSION_USER",user);
-                    Editor.apply();
-                    SharedPreferences newPref = context.getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
-                    System.out.println("Session id:"+newPref.getString(SESSION_ID,"")+"\nSession User:"+newPref.getString(SESSION_USER,""));
-                    */
+                    Constants constants = new Constants(context);
+                    constants.setEmail(user);
                     context.startActivity(i);
                     return;
                 } else if (incorrectPassword) {
