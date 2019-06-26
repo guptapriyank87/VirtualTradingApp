@@ -6,18 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".BuySellStock">
 
-
     <FrameLayout
-        android:layout_width="395dp"
-        android:layout_height="715dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:id="@+id/framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/textview13"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="center_horizontal"
+            android:text="Buy/Sell Stock"
+            android:textAlignment="center"
+            android:textColor="@color/design_default_color_surface"
+            android:background="@color/design_default_color_error"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView8"
@@ -35,7 +45,7 @@
         <TextView
             android:id="@+id/companyName"
             style="@style/TextAppearance.AppCompat.Headline"
-            android:layout_width="170dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="80dp"
@@ -85,7 +95,7 @@
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="160dp"
+            android:layout_marginTop="180dp"
             android:text="Status"
             android:textAlignment="center"
             android:textSize="20sp"
@@ -97,18 +107,20 @@
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="190dp"
+            android:layout_marginTop="210dp"
             android:text="Strong Buy"
             android:textAlignment="center"
             android:textSize="20sp"
+            android:background="@color/strongBuy"
             android:textStyle="normal"
             />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="240dp">
+            android:layout_marginTop="260dp">
 
             <TextView
                 android:id="@+id/textview11"
@@ -140,7 +152,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="280dp">
+            android:layout_marginTop="300dp">
 
             <TextView
                 android:id="@+id/textview12"
@@ -168,5 +180,37 @@
                 app:layout_constraintLeft_toRightOf="@+id/textview12"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBSS_Buy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buy"
+            android:layout_marginTop="400dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="100dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBSS_Sell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            android:text="Sell"
+            android:layout_marginTop="400dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="100dp"
+            />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBSS_Watch"
+            android:layout_width="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            android:layout_height="wrap_content"
+            android:text="Watch"
+            android:layout_marginTop="480dp"
+            android:layout_gravity="center_horizontal"
+            />
+
+
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

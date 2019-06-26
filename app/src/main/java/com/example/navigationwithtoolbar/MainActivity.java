@@ -195,10 +195,8 @@ public class MainActivity extends AppCompatActivity {
                     //alertDialog.setMessage("Login Successful!");
                     Intent i = new Intent(context,HomeActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
                     //Generating SESSION_ID
                     //s = s.replace("loginsuccess","");
-
                     Constants constants = new Constants(context);
                     constants.setEmail(user);
                     context.startActivity(i);

@@ -194,9 +194,12 @@ public class HomeFragment extends Fragment {
                         ProductAdapter.OnCardListner onCardListner = new ProductAdapter.OnCardListner() {
                             @Override
                             public void onCardClick(int position) {
-                                System.out.println("card clicked"+position);
                                 Log.i("Card Selected",productList.get(position).getCompanyName());
-
+                                Intent in = new Intent(getActivity(),BuySellStock.class);
+                                in.putExtra("companyName",productList.get(position).getCompanyName());
+                                in.putExtra("price",productList.get(position).getPrice());
+                                in.putExtra("status",productList.get(position).getStatus());
+                                startActivity(in);
                             }
                         };
                         productAdapter =new ProductAdapter(getActivity(),productList,onCardListner);
