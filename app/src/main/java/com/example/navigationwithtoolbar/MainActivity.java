@@ -33,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
     TextView signupButton;
     TextView btnForgotPassword;
     EditText etusername,etpassword;
-    Boolean homeCode = false;
-    public static final String SESSION_ID= null;
+
 
 
 
@@ -106,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
     public static class BackgroundWorker extends AsyncTask<String, String, String> {
         Context context;
         AlertDialog alertDialog;
-
-        boolean loginStatus = false;
         String user = "nouser";
         private Constants constants;
         private String ip;
@@ -200,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     //Generating SESSION_ID
-                    s = s.replace("loginsuccess","");
+                    //s = s.replace("loginsuccess","");
 
                     Constants constants = new Constants(context);
                     constants.setEmail(user);
@@ -224,10 +221,6 @@ public class MainActivity extends AppCompatActivity {
 
         public BackgroundWorker(Context ctx) {
             context = ctx;
-        }
-        public boolean ifLoginSuccess(){
-            return loginStatus;
-
         }
     }
 }
