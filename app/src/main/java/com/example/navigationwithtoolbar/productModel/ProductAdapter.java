@@ -21,11 +21,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private Context mCtx;
     private List<Product> productList;
+    private OnCardListner onCardListner;
 
 
-    public ProductAdapter(Context mCtx, List<Product> productList) {
+    public ProductAdapter(Context mCtx, List<Product> productList,OnCardListner onCardListner) {
         this.mCtx = mCtx;
         this.productList = productList;
+        this.onCardListner = onCardListner;
     }
 
     @NonNull
@@ -34,7 +36,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         LayoutInflater inflater = LayoutInflater.from(mCtx);
        // View view = inflater.inflate(R.layout.list_layout,null);
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_layout, viewGroup, false);
-        ProductViewHolder holder = new ProductViewHolder(view);
+        ProductViewHolder holder = new ProductViewHolder(view,onCardListner);
         return holder;
     }
 
@@ -55,6 +57,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         }else {
             productViewHolder.tStatus.setBackgroundResource(R.color.neutral);
         }
+
     }
 
     @Override
@@ -62,14 +65,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return productList.size();
     }
 
-    class ProductViewHolder extends RecyclerView.ViewHolder{
+    class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tCompanyName,tPrice,tStatus;
-        public ProductViewHolder(@NonNull View itemView) {
+        OnCardListner onCardListner;
+        public ProductViewHolder(@NonNull View itemView,OnCardListner onCardListner) {
             super(itemView);
             tCompanyName = itemView.findViewById(R.id.companyName);
             tPrice = itemView.findViewById(R.id.price);
             tStatus = itemView.findViewById(R.id.status);
             itemView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,RecyclerView.LayoutParams.WRAP_CONTENT));
+            itemView.setOnClickListener(this);
+            this.onCardListner = onCardListner;
         }
+
+        @Override
+        public void onClick(View v) {
+            onCardListner.onCardClick(getAdapterPosition());
+        }
+    }
+    public interface OnCardListner{
+            void onCardClick(int position);
     }
 }

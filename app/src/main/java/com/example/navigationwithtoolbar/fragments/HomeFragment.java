@@ -2,6 +2,7 @@ package com.example.navigationwithtoolbar.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -22,6 +23,9 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.navigationwithtoolbar.BuySellStock;
+import com.example.navigationwithtoolbar.Constants;
+import com.example.navigationwithtoolbar.HomeActivity;
 import com.example.navigationwithtoolbar.R;
 import com.example.navigationwithtoolbar.productModel.Product;
 import com.example.navigationwithtoolbar.productModel.ProductAdapter;
@@ -44,11 +48,13 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
-    RecyclerView recyclerView;
-    ProductAdapter productAdapter;
-    List<Product> productList;
-    SwipeRefreshLayout swipeRefreshLayout;
-    View v;
+    private RecyclerView recyclerView;
+    private ProductAdapter productAdapter;
+    private List<Product> productList;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private View v;
+    private Constants constants;
+    private String ip;
 
 
     public HomeFragment() {
@@ -59,6 +65,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_home,null);
+        constants = new Constants(getActivity());
+        ip = constants.getIp();
         productList = new ArrayList<>();
         recyclerView = v.findViewById(R.id.homeRecyclerView);
         recyclerView.setHasFixedSize(true);
@@ -90,11 +98,12 @@ public class HomeFragment extends Fragment {
         });
 
     }
+
     public class DataFetcher extends AsyncTask<String,String,String> {
         Context context;
         String c,p,s;
         public List<Product> productList;
-        String ip = "192.168.43.216";
+
 
 
         @Override
@@ -182,7 +191,15 @@ public class HomeFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        productAdapter =new ProductAdapter(getActivity(),productList);
+                        ProductAdapter.OnCardListner onCardListner = new ProductAdapter.OnCardListner() {
+                            @Override
+                            public void onCardClick(int position) {
+                                System.out.println("card clicked"+position);
+                                Log.i("Card Selected",productList.get(position).getCompanyName());
+
+                            }
+                        };
+                        productAdapter =new ProductAdapter(getActivity(),productList,onCardListner);
                         recyclerView.setAdapter(productAdapter);
                     }
                 });

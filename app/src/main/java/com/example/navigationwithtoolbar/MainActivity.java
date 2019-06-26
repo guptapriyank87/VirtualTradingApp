@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(in);
         }else {
             setContentView(R.layout.activity_main);
+
+
             signupButton = findViewById(R.id.btnsignup);
             etusername = findViewById(R.id.etemail);
             etpassword = findViewById(R.id.etpassword);
@@ -102,14 +106,19 @@ public class MainActivity extends AppCompatActivity {
     public static class BackgroundWorker extends AsyncTask<String, String, String> {
         Context context;
         AlertDialog alertDialog;
-        String ip = "192.168.43.216";
+
         boolean loginStatus = false;
         String user = "nouser";
+        private Constants constants;
+        private String ip;
+
 
 
         @Override
         protected String doInBackground(String... strings) {
             String type = strings[0];
+            constants = new Constants(context);
+            ip = constants.getIp();
             String login_url = "http://"+ip+"/pgr/login.php";
 
             if (type.equals("login")){
