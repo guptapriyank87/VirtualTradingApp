@@ -94,8 +94,6 @@ public class MainActivity extends AppCompatActivity {
         BackgroundWorker backgroundWorker =new BackgroundWorker(this);
         try {
             backgroundWorker.execute(type, us, ps);
-            backgroundWorker.wait(300);
-            backgroundWorker.cancel(true);
         }catch (Exception e){
             e.printStackTrace();
         }

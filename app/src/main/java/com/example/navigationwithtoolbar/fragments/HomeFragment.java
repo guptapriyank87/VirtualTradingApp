@@ -101,7 +101,7 @@ public class HomeFragment extends Fragment {
 
     public class DataFetcher extends AsyncTask<String,String,String> {
         Context context;
-        String c,p,s;
+        String c,p,s,cd;
         public List<Product> productList;
 
 
@@ -186,7 +186,8 @@ public class HomeFragment extends Fragment {
                     c = jsonObj.getString("companyName");
                     p = jsonObj.getString("price");
                     s = jsonObj.getString("status");
-                    productList.add(new Product(c,"INR "+p,s));
+                    cd = jsonObj.getString("code");
+                    productList.add(new Product(c,"INR "+p,s,cd));
                 }
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -199,6 +200,7 @@ public class HomeFragment extends Fragment {
                                 in.putExtra("companyName",productList.get(position).getCompanyName());
                                 in.putExtra("price",productList.get(position).getPrice());
                                 in.putExtra("status",productList.get(position).getStatus());
+                                in.putExtra("code",productList.get(position).getCode());
                                 startActivity(in);
                             }
                         };

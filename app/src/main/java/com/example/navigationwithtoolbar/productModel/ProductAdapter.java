@@ -46,6 +46,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         productViewHolder.tCompanyName.setText(product.getCompanyName());
         productViewHolder.tPrice.setText(product.getPrice());
         productViewHolder.tStatus.setText(product.getStatus());
+        productViewHolder.tCode.setText(product.getCode());
         if (product.getStatus().equals("Strong Buy")){
             productViewHolder.tStatus.setBackgroundResource(R.color.strongBuy);
         }else if (product.getStatus().equals("Buy")){
@@ -66,13 +67,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tCompanyName,tPrice,tStatus;
+        TextView tCompanyName,tPrice,tStatus,tCode;
         OnCardListner onCardListner;
         public ProductViewHolder(@NonNull View itemView,OnCardListner onCardListner) {
             super(itemView);
             tCompanyName = itemView.findViewById(R.id.companyName);
             tPrice = itemView.findViewById(R.id.price);
             tStatus = itemView.findViewById(R.id.status);
+            tCode = itemView.findViewById(R.id.code);
             itemView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,RecyclerView.LayoutParams.WRAP_CONTENT));
             itemView.setOnClickListener(this);
             this.onCardListner = onCardListner;

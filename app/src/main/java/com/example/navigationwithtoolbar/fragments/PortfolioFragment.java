@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -24,6 +25,7 @@ public class PortfolioFragment extends Fragment {
     View v ;
     TextView email;
     Constants constants;
+    Button tempLogout;
 
     public PortfolioFragment() {
         // Required empty public constructor
@@ -34,6 +36,14 @@ public class PortfolioFragment extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_portfolio,null);
         email = v.findViewById(R.id.email);
+        tempLogout = v.findViewById(R.id.logout);
+        tempLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Constants constants = new Constants(getActivity());
+                constants.removeUser();
+            }
+        });
         constants = new Constants(getContext());
         email.setText(constants.getEmail());
         return v;
