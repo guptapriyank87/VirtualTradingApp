@@ -1,12 +1,15 @@
 package com.example.navigationwithtoolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -35,14 +38,18 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
-public class BuySellStock extends AppCompatActivity {
+public class BuySellStock extends AppCompatActivity
+{
 
-    TextView companyName,price,status,companyCode;
+    public TextView companyName,price,status,companyCode,avaiStocks;
+    public int avi;
     String c,p,s,cd;
     AlertDialog placeBuyOrder,placeSellOrder;
     Button btnBuy,btnSell,btnWatch;
     Context ctx;
+    Constants constants;
 
     //buy dialog declaration
     View buyView ;
@@ -69,6 +76,7 @@ public class BuySellStock extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_sell_stock);
         ctx = this;
+        final AvailableStocks availableStocks = new AvailableStocks(this);
 
         //Buy dialog initialisation
         buyView = getLayoutInflater().inflate(R.layout.buy_dialog,null);
@@ -100,6 +108,7 @@ public class BuySellStock extends AppCompatActivity {
         btnWatch = findViewById(R.id.btnBSS_Watch);
         price = findViewById(R.id.currentPrice);
         status = findViewById(R.id.status);
+        avaiStocks = findViewById(R.id.BSSavailableStocks);
         placeBuyOrder = new AlertDialog.Builder(this).create();
         placeSellOrder = new AlertDialog.Builder(this).create();
         c = in.getStringExtra("companyName");
@@ -113,7 +122,7 @@ public class BuySellStock extends AppCompatActivity {
                                 +"\n"+in.getStringExtra("status"));
         companyName.setText(in.getStringExtra("companyName"));
         companyCode.setText(cd);
-        price.setText("INR "+in.getStringExtra("price"));
+        price.setText(in.getStringExtra("price"));
 
         if (s.equals("Strong Buy")){
             status.setText(s);
@@ -137,10 +146,13 @@ public class BuySellStock extends AppCompatActivity {
             status.setBackgroundResource(R.color.neutral);
         }
         //TODO:apply available stock information here
+        constants = new Constants(this);
+        availableStocks.execute("getavi",constants.getEmail(),in.getStringExtra("companyName"));
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dailogCompanyName.setText(c);
+                buyButton.setEnabled(false);
                 dailogCompanyPrice.setText("INR "+p);
                 BADCompanyCode.setText(cd);
                 buyNumber.addTextChangedListener(new TextWatcher() {
@@ -159,6 +171,11 @@ public class BuySellStock extends AppCompatActivity {
                         Double amt = nbr*prc;
                         String amount = amt.toString();
                         debitAmount.setText("INR "+amount);
+                        if(nbr>0){
+                            buyButton.setEnabled(true);
+                        }else{
+                            buyButton.setEnabled(false);
+                        }
                     }
 
                     @Override
@@ -190,6 +207,7 @@ public class BuySellStock extends AppCompatActivity {
         btnSell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sellButton.setEnabled(false);
                 selldailogCompanyName.setText(c);
                 selldailogCompanyPrice.setText("INR " + p);
                 sellNumber.addTextChangedListener(new TextWatcher() {
@@ -208,6 +226,18 @@ public class BuySellStock extends AppCompatActivity {
                         Double amt = prc*nbr;
                         String amount = amt.toString();
                         sellAmount.setText("INR "+amount);
+                        if(Integer.parseInt(s.toString()) != 0) {
+                            if (avi > Integer.parseInt(s.toString())) {
+                                sellNumber.setTextColor(ContextCompat.getColor(ctx, R.color.strongBuy));
+                                sellButton.setEnabled(true);
+                            } else {
+                                sellNumber.setTextColor(ContextCompat.getColor(ctx, R.color.strongSell));
+                                sellButton.setEnabled(false);
+                            }
+                        }else{
+                            sellButton.setEnabled(false);
+                        }
+
                     }
 
                     @Override
@@ -215,9 +245,22 @@ public class BuySellStock extends AppCompatActivity {
 
                     }
                 });
+                availableSellStocks.setText(String.valueOf(avi));
                 sellCancleButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        placeSellOrder.hide();
+                    }
+                });
+                sellButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Constants constants = new Constants(ctx);
+                        String email = constants.getEmail();
+                        SellStock sellStock = new SellStock(ctx);
+                        sellStock.execute("sell",email,cd,sellNumber.getText().toString());
+                        avi = avi - Integer.parseInt(sellNumber.getText().toString());
+
                         placeSellOrder.hide();
                     }
                 });
@@ -228,9 +271,8 @@ public class BuySellStock extends AppCompatActivity {
         });
 
     }
-    public static class BuyStock extends AsyncTask<String, String, String> {
+    public class BuyStock extends AsyncTask<String, String, String> {
         Context context;
-        AlertDialog alertDialog;
         private Constants constants;
         private String ip;
 
@@ -285,7 +327,7 @@ public class BuySellStock extends AppCompatActivity {
                     bufferedReader.close();
                     inputStream.close();
                     httpURLConnection.disconnect();
-
+                    System.out.println(result);
                     return result;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -298,8 +340,6 @@ public class BuySellStock extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            alertDialog = new AlertDialog.Builder(context).create();
-            alertDialog.setTitle("Status");
         }
 
         @Override
@@ -313,34 +353,221 @@ public class BuySellStock extends AppCompatActivity {
             try {
                 boolean buySuccessful = s.contains("buysuccessful");
                 boolean buyUnsuccessful = s.contains("buyunsuccessful");
-                boolean sellSuccessful = s.contains("sellunsuccessful");
-                boolean sellUnsuccessful = s.contains("sellunsuccessful");
 
                 if (buySuccessful) {
                     Log.i("status","insert successful!");
                     Toast.makeText(context, "Your order was successful!", Toast.LENGTH_SHORT).show();
+                    constants = new Constants(context);
+                    AvailableStocks availableStocks = new AvailableStocks(context);
+                    availableStocks.execute("getavi",constants.getEmail(),c);
                 } else if (buyUnsuccessful) {
                     Toast.makeText(context, "Your order was unsuccessful!", Toast.LENGTH_SHORT).show();
-                } else if (sellSuccessful) {
-                    alertDialog.setMessage("Sell Successful");
-                    alertDialog.show();
-                }else if (sellUnsuccessful) {
-                    alertDialog.setMessage("Sell Unsuccessful");
-                    alertDialog.show();
-                }else {
-                    alertDialog.setMessage("Unknown error!");
+                } else {
+                    //alertDialog.setMessage("Unknown error!");
+                    Toast.makeText(context, "Network error! Please try again", Toast.LENGTH_SHORT).show();
                     Log.i("error", s);
                 }
             }catch (Exception e){
+                Toast.makeText(context, "Unknown error! Please try again", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
                 Log.i("Exception","e");
-                alertDialog.setMessage("Network Error!");
-                alertDialog.show();
                 Log.i("error", s);
             }
         }
 
         public BuyStock(Context ctx) {
+            context = ctx;
+        }
+    }
+    public class SellStock extends AsyncTask<String, String, String> {
+        Context context;
+        private Constants constants;
+        private String ip;
+
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String type = strings[0];
+            constants = new Constants(context);
+            ip = constants.getIp();
+            String sell_url = "http://"+ip+"/pgr/sellstock.php";
+            if (type.equals("sell")){
+                try {
+                    String email = strings[1];
+                    String companyCode = strings[2];
+                    String sellNumber = strings[3];
+                    Log.i("status","inside the buy try catch");
+                    URL url = new URL(sell_url);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    Log.i("status","Http url connection established properly");
+
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    Log.i("status","buffer writer working");
+
+                    String post_data = URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
+                            URLEncoder.encode("companyCode","UTF-8")+"="+URLEncoder.encode(companyCode,"UTF-8")+"&"+
+                            URLEncoder.encode("sellNumber","UTF-8")+"="+URLEncoder.encode(sellNumber,"UTF-8");
+                    Log.i("postData",post_data);
+
+                    bufferedWriter.write(post_data);
+                    Log.i("status","bufferedWriter.write(post_data) executed successfully");
+
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    //reading response for feedback
+                    Log.i("status","now reading feedback");
+
+
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
+                    String result = "";
+                    String line  = "";
+                    while ((line = bufferedReader.readLine())!=null){
+                        result += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                    return result;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                boolean sellSuccessful = s.contains("sellsuccessful");
+                boolean sellUnsuccessful = s.contains("sellunsuccessful");
+
+                if (sellSuccessful) {
+                    Log.i("status","insert successful!");
+                    Toast.makeText(context, "Your order was successful!", Toast.LENGTH_SHORT).show();
+                    constants = new Constants(context);
+                    AvailableStocks availableStocks = new AvailableStocks(context);
+                    availableStocks.execute("getavi",constants.getEmail(),c);
+                }else if (sellUnsuccessful) {
+                    Toast.makeText(context, "Your order was unsuccessful!", Toast.LENGTH_SHORT).show();
+                }else {
+                    //alertDialog.setMessage("Unknown error!");
+                    Toast.makeText(context, "Network error! Please try again", Toast.LENGTH_SHORT).show();
+                    Log.i("error", s);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                Log.i("Exception","e");
+                Log.i("error", s);
+            }
+        }
+
+        public SellStock(Context ctx) {
+            context = ctx;
+        }
+    }
+
+    public class AvailableStocks extends AsyncTask<String, String, String> {
+        Context context;
+        private Constants constants;
+        private String ip;
+        private String r;
+        @Override
+        protected String doInBackground(String... strings) {
+            String type = strings[0];
+            constants = new Constants(context);
+            ip = constants.getIp();
+            String sell_url = "http://"+ip+"/pgr/getavailablestocks.php";
+            if (type.equals("getavi")){
+                try {
+                    String email = strings[1];
+                    String companyName = strings[2];
+                    Log.i("status","inside the buy try catch");
+                    URL url = new URL(sell_url);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    Log.i("status","Http url connection established properly");
+
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    Log.i("status","buffer writer working");
+
+                    String post_data = URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
+                            URLEncoder.encode("companyName","UTF-8")+"="+URLEncoder.encode(companyName,"UTF-8");
+                            Log.i("postData",post_data);
+
+                    bufferedWriter.write(post_data);
+                    Log.i("status","bufferedWriter.write(post_data) executed successfully");
+
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    //reading response for feedback
+                    Log.i("status","now reading feedback");
+
+
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
+                    String result = "";
+                    String line  = "";
+                    while ((line = bufferedReader.readLine())!=null){
+                        result += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    return result;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //available stocks will be received here in s.
+            s = s.replace("INR ","");
+            avaiStocks.setText(s);
+            Log.i("avi",s);
+            avi = Integer.parseInt(s);
+        }
+        public AvailableStocks(Context ctx) {
             context = ctx;
         }
     }
