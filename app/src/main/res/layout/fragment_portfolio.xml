@@ -1,21 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PortfolioFragment">
+    android:fitsSystemWindows="true"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/email"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/logout"
-        android:text="logout"/>
+        android:orientation="vertical"
+        >
 
-</FrameLayout>
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </FrameLayout>
+
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+            android:id="@+id/refreshLayout"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                tools:listitem="@layout/portfolio_list_layout"
+                android:id="@+id/portfolioRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

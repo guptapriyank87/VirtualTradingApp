@@ -213,9 +213,7 @@ public class BuySellStock extends AppCompatActivity
                 sellNumber.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                     }
-
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.length()==0){
@@ -227,7 +225,7 @@ public class BuySellStock extends AppCompatActivity
                         String amount = amt.toString();
                         sellAmount.setText("INR "+amount);
                         if(Integer.parseInt(s.toString()) != 0) {
-                            if (avi > Integer.parseInt(s.toString())) {
+                            if (avi >= Integer.parseInt(s.toString())) {
                                 sellNumber.setTextColor(ContextCompat.getColor(ctx, R.color.strongBuy));
                                 sellButton.setEnabled(true);
                             } else {

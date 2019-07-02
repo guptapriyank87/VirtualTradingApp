@@ -12,11 +12,13 @@
     <color name="cardView">#FFD8FA</color>
     <color name="buttonBackground">#000000</color>
     <color name="bg">#424242</color>
-    <color name="companyName">#F0AA52</color>
+    <color name="companyName">#FFE400</color>
     <color name="price">#ffffff</color>
     <color name="buyPrice">#67AEE6</color>
     <color name="values">#67AEE6</color>
     <color name="debit">#3BF828</color>
     <color name="noColor">#00FFFFFF</color>
+    <color name="INR">#00776B</color>
+
 
 </resources>

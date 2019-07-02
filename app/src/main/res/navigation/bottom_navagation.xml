@@ -10,13 +10,13 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
-        android:id="@+id/watchlistFragment"
-        android:name="com.example.navigationwithtoolbar.fragments.PortfolioFragment"
-        android:label="fragment_portfolio"
-        tools:layout="@layout/fragment_portfolio" />
-    <fragment
         android:id="@+id/portfolioFragment"
         android:name="com.example.navigationwithtoolbar.fragments.PortfolioFragment"
         android:label="fragment_portfolio"
         tools:layout="@layout/fragment_portfolio" />
+    <fragment
+        android:id="@+id/watchlistFragment"
+        android:name="com.example.navigationwithtoolbar.fragments.WatchlistFragment"
+        android:label="fragment_watchlist"
+        tools:layout="@layout/fragment_watchlist" />
 </navigation>
