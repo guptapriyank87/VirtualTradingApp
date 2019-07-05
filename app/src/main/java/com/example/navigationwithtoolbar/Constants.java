@@ -8,7 +8,7 @@ public class Constants {
     Context context;
 
     public void removeUser(){
-        sharedPreferences.edit().clear();
+        setEmail("");
     }
     public String getEmail() {
         email = sharedPreferences.getString("useremail","");

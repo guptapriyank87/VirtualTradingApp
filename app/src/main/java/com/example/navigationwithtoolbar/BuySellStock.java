@@ -267,7 +267,13 @@ public class BuySellStock extends AppCompatActivity
                 placeSellOrder.show();
             }
         });
-
+        btnWatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Watchlist watchlist = new Watchlist(ctx);
+                watchlist.execute("add",constants.getEmail(),cd);
+            }
+        });
     }
     public class BuyStock extends AsyncTask<String, String, String> {
         Context context;
@@ -566,6 +572,115 @@ public class BuySellStock extends AppCompatActivity
             avi = Integer.parseInt(s);
         }
         public AvailableStocks(Context ctx) {
+            context = ctx;
+        }
+    }
+    public class Watchlist extends AsyncTask<String, String, String> {
+        Context context;
+        private Constants constants;
+        private String ip;
+
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String type = strings[0];
+            constants = new Constants(context);
+            ip = constants.getIp();
+            String add_url = "http://"+ip+"/pgr/addtowatchlist.php";
+            if (type.equals("add")){
+                try {
+                    String email = strings[1];
+                    String companyCode = strings[2];
+                    Log.i("status","inside the buy try catch");
+                    URL url = new URL(add_url);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    Log.i("status","Http url connection established properly");
+
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    Log.i("status","buffer writer working");
+
+                    String post_data = URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
+                            URLEncoder.encode("companyCode","UTF-8")+"="+URLEncoder.encode(companyCode,"UTF-8");
+                    Log.i("postData",post_data);
+
+                    bufferedWriter.write(post_data);
+                    Log.i("status","bufferedWriter.write(post_data) executed successfully");
+
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    //reading response for feedback
+                    Log.i("status","now reading feedback");
+
+
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
+                    String result = "";
+                    String line  = "";
+                    while ((line = bufferedReader.readLine())!=null){
+                        result += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                    return result;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                boolean addSuccessful = s.contains("insertsuccessful");
+                boolean addUnsuccessful = s.contains("insertunsuccessful");
+                boolean alreadyExist = s.contains("alreadyexist");
+
+                if (addSuccessful) {
+                    Log.i("status","insert successful!");
+                    Toast.makeText(context, "Successfully added to your watchlist!", Toast.LENGTH_SHORT).show();
+                    constants = new Constants(context);
+                    AvailableStocks availableStocks = new AvailableStocks(context);
+                    availableStocks.execute("getavi",constants.getEmail(),c);
+                }else if (addUnsuccessful) {
+                    Toast.makeText(context, "There was some problem adding this company to your watchlist", Toast.LENGTH_SHORT).show();
+                }else if (alreadyExist)
+                {
+                    Toast.makeText(context, "this company is already in your watchlist", Toast.LENGTH_SHORT).show();
+                }else{
+                    //alertDialog.setMessage("Unknown error!");
+                    Toast.makeText(context, "Network error! Please try again", Toast.LENGTH_SHORT).show();
+                    Log.i("error", s);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                Log.i("Exception","e");
+                Log.i("error",s);
+            }
+        }
+
+        public Watchlist(Context ctx) {
             context = ctx;
         }
     }

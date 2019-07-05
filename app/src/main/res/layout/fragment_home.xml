@@ -8,41 +8,63 @@
     android:fitsSystemWindows="true"
     >
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-
-        <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
-
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
-        android:id="@+id/refreshLayout"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            tools:listitem="@layout/list_layout"
-            android:id="@+id/homeRecyclerView"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        </androidx.recyclerview.widget.RecyclerView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
+            </FrameLayout>
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toptoolbar"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                />
+
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/refreshLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/homeRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/list_layout">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/networkerror"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:alpha="0"
+            app:srcCompat="@drawable/networkerror" />
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

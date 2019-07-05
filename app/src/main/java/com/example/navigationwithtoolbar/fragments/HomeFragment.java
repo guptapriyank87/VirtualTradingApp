@@ -7,25 +7,29 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.navigationwithtoolbar.BuySellStock;
 import com.example.navigationwithtoolbar.Constants;
-import com.example.navigationwithtoolbar.HomeActivity;
 import com.example.navigationwithtoolbar.R;
 import com.example.navigationwithtoolbar.productModel.Product;
 import com.example.navigationwithtoolbar.productModel.ProductAdapter;
@@ -34,12 +38,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +63,10 @@ public class HomeFragment extends Fragment {
     private View v;
     private Constants constants;
     private String ip;
-
+    private ImageView error;
+    private Toolbar toolbar;
+    private MenuItem mSpinnerItem1 = null;
+    String r="";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -66,49 +77,117 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_home,null);
         constants = new Constants(getActivity());
+        toolbar = v.findViewById(R.id.toolbar);
         ip = constants.getIp();
+        error = v.findViewById(R.id.networkerror);
         productList = new ArrayList<>();
         recyclerView = v.findViewById(R.id.homeRecyclerView);
         recyclerView.setHasFixedSize(true);
         swipeRefreshLayout = v.findViewById(R.id.refreshLayout);
+
+
+        //-----------------------toolbar stuff------------------------
+
+        toolbar.setTitle("Nifty500");
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if(id == R.id.share){
+                    Toast.makeText(getContext(), "pop", Toast.LENGTH_SHORT).show();
+                }else if(id == R.id.search){
+                    Toast.makeText(getContext(), "pop", Toast.LENGTH_SHORT).show();
+                }else if(id == R.id.about){
+                    Toast.makeText(getContext(), "pop", Toast.LENGTH_SHORT).show();
+                }else if(id == R.id.exit){
+                    Toast.makeText(getContext(), "pop", Toast.LENGTH_SHORT).show();
+                }else if(id == R.id.filter){
+                    Spinner s = (Spinner) item.getActionView();
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),R.array.filter,android.R.layout.simple_spinner_dropdown_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    s.setAdapter(adapter);
+
+
+                    s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String text = parent.getItemAtPosition(position).toString();
+                            fetcIt(text);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
+                }
+                return false;
+            }
+        });
+        //-----------X---------------toolbar----------------X------------------------------
+
+
+
+
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetcIt();
+                fetcIt(r);
             }
         });
-        fetcIt();
+        fetcIt("All");
+
         //return inflater.inflate(R.layout.fragment_home, container, false);
         return v;
+    }
+//-------------------------------Toolbar operation-----------------------------------------
+    /*
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.top_menu,menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    public void fetcIt(){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                DataFetcher dataFetcher = new DataFetcher(getActivity());
-                dataFetcher.execute("fetchdata");
-            }
-        });
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.share){
+            Toast.makeText(getActivity(), "share selected", Toast.LENGTH_SHORT).show();
+        }else if(id == R.id.search){
+            Toast.makeText(getActivity(), "search selected", Toast.LENGTH_SHORT).show();
+        }else if(id == R.id.about) {
+            Toast.makeText(getActivity(), "about selected", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
+    */
+//------------------------------------------------------------------------------------------
+    public void fetcIt(String s){
+        DataFetcher dataFetcher = new DataFetcher(getActivity());
+        dataFetcher.execute("fetchdata",s);
+    }
+
+
+
 
     public class DataFetcher extends AsyncTask<String,String,String> {
         Context context;
         String c,p,s,cd;
         public List<Product> productList;
-
-
-
+        String filter;
         @Override
         protected String doInBackground(String... strings) {
             String type = strings[0];
+            filter = strings[1];
+            System.out.println("filter is:"+filter);
             String fetchData_url = "http://"+ip+"/pgr/fetchdata.php";
             productList = new ArrayList<>();
             getActivity().runOnUiThread(new Runnable() {
@@ -121,6 +200,19 @@ public class HomeFragment extends Fragment {
                 try {
                     URL url = new URL(fetchData_url);
                     HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    Log.i("status","Http url connection established properly");
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    Log.i("status","buffer writer working");
+                    String post_data = URLEncoder.encode("filter","UTF-8")+"="+URLEncoder.encode(filter,"UTF-8");
+                    Log.i("postData",post_data);
+                    bufferedWriter.write(post_data);
+                    Log.i("status","bufferedWriter.write(post_data) executed successfully");
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
                     InputStream inputStream = httpURLConnection.getInputStream();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
                     String result = "";
@@ -178,6 +270,7 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(String str) {
             Log.i("jason String",str);
+
             try {
                 JSONArray jsonArr = new JSONArray(str);
                 for (int i = 0; i < jsonArr.length(); i++)
@@ -189,6 +282,7 @@ public class HomeFragment extends Fragment {
                     cd = jsonObj.getString("code");
                     productList.add(new Product(c,"INR "+p,s,cd));
                 }
+                System.out.println(productList);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

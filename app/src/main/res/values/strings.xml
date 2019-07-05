@@ -4,6 +4,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="SESSION_ID">null</string>
+    <string-array name="filter">
+        <item>All</item>
+        <item>Strong Buy</item>
+        <item>Strong Sell</item>
+        <item>Buy</item>
+        <item>Sell</item>
+    </string-array>
 
 
 </resources>

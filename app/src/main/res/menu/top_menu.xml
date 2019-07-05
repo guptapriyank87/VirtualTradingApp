@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item
+        android:id="@+id/filter"
+        android:title="Filter"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="android.widget.Spinner"
+        android:icon="@drawable/ic_filter" />
     <item
         android:id="@+id/share"
         android:title="Share"/>
@@ -17,9 +26,5 @@
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:icon="@drawable/ic_search_black_24dp"/>
-    <item
-        android:id="@+id/settings"
-        android:title="Settings"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_settings_white_24dp"/>
+
 </menu>
