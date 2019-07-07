@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,8 +16,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.navigationwithtoolbar.BuySellStock;
 import com.example.navigationwithtoolbar.Constants;
@@ -50,7 +58,8 @@ public class PortfolioFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Constants constants;
     private String ip;
-
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
     public PortfolioFragment() {
         // Required empty public constructor
     }
@@ -64,6 +73,7 @@ public class PortfolioFragment extends Fragment {
         portfolioProductList = new ArrayList<>();
         recyclerView = v.findViewById(R.id.portfolioRecyclerView);
         recyclerView.setHasFixedSize(true);
+        toolbar = v.findViewById(R.id.portfolio_toolbar);
         swipeRefreshLayout = v.findViewById(R.id.refreshLayout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -72,6 +82,22 @@ public class PortfolioFragment extends Fragment {
                 fetcIt();
             }
         });
+
+        //-----------------toolbar stuff--------------------------------------
+        toolbar.setTitle("Portfolio");
+        final MenuItem spin = toolbar.getMenu().findItem(R.id.filter);
+        final MenuItem search = toolbar.getMenu().findItem(R.id.search);
+        search.setVisible(false);
+        spin.setVisible(false);
+        //-------------------------X---------X----------------X--------X-----------------------
+
+        //---------------------Drawer stuff----------------------------------------------
+        drawer = getActivity().findViewById(R.id.drawerlayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(),drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        //----------------------X---------X------------X-----------X------------------------
+
         fetcIt();
         //return inflater.inflate(R.layout.fragment_home, container, false);
         return v;
@@ -91,6 +117,7 @@ public class PortfolioFragment extends Fragment {
         Context context;
         String c,p,s,cd,avi,worth,investment;
         public List<PortfolioProduct> portfolioProductList;
+
 
 
 

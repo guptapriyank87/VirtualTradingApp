@@ -3,22 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-
+<group android:checkableBehavior="single">
     <item
         android:id="@+id/filter"
         android:title="Filter"
-        app:showAsAction="always|collapseActionView"
+        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.widget.Spinner"
+
         android:icon="@drawable/ic_filter" />
-    <item
-        android:id="@+id/share"
-        android:title="Share"/>
-    <item
-        android:id="@+id/about"
-        android:title="About"/>
-    <item
-        android:id="@+id/exit"
-        android:title="Exit"/>
 
     <item
         android:id="@+id/search"
@@ -26,5 +18,6 @@
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:icon="@drawable/ic_search_black_24dp"/>
+</group>
 
 </menu>

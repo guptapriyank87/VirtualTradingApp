@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -50,6 +54,10 @@ public class WatchlistFragment extends Fragment {
     private View v;
     private Constants constants;
     private String ip;
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+
+
 
     public WatchlistFragment() {
         // Required empty public constructor
@@ -68,6 +76,7 @@ public class WatchlistFragment extends Fragment {
         recyclerView = v.findViewById(R.id.watchlistRecyclerView);
         recyclerView.setHasFixedSize(true);
         swipeRefreshLayout = v.findViewById(R.id.watchlistrefreshLayout);
+        toolbar = v.findViewById(R.id.watchlist_toolbar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -75,6 +84,25 @@ public class WatchlistFragment extends Fragment {
                 fetcIt();
             }
         });
+
+
+        //-----------------toolbar stuff--------------------------------------
+        toolbar.setTitle("Watchlist");
+        final MenuItem spin = toolbar.getMenu().findItem(R.id.filter);
+        final MenuItem search = toolbar.getMenu().findItem(R.id.search);
+        search.setVisible(false);
+        spin.setVisible(false);
+        //-------------------------X---------X----------------X--------X-----------------------
+
+        //---------------------Drawer stuff----------------------------------------------
+        drawer = getActivity().findViewById(R.id.drawerlayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(),drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        //----------------------X---------X------------X-----------X------------------------
+
+
+
         fetcIt();
         return v;
         //return inflater.inflate(R.layout.fragment_watchlist, container, false);

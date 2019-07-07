@@ -8,7 +8,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,8 +67,8 @@ public class HomeFragment extends Fragment {
     private String ip;
     private ImageView error;
     private Toolbar toolbar;
-    private MenuItem mSpinnerItem1 = null;
     String r="";
+    private DrawerLayout drawer;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -89,26 +91,22 @@ public class HomeFragment extends Fragment {
         //-----------------------toolbar stuff------------------------
 
         toolbar.setTitle("Nifty500");
-
+        final MenuItem spin = toolbar.getMenu().findItem(R.id.filter);
+        final MenuItem search = toolbar.getMenu().findItem(R.id.search);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
-                if(id == R.id.share){
-                    Toast.makeText(getContext(), "pop", Toast.LENGTH_SHORT).show();
-                }else if(id == R.id.search){
-                    Toast.makeText(getContext(), "pop", Toast.LENGTH_SHORT).show();
-                }else if(id == R.id.about){
-                    Toast.makeText(getContext(), "pop", Toast.LENGTH_SHORT).show();
-                }else if(id == R.id.exit){
+                if(id == R.id.search){
+                    spin.collapseActionView();
+                    //TODO:Apply search settings.
                     Toast.makeText(getContext(), "pop", Toast.LENGTH_SHORT).show();
                 }else if(id == R.id.filter){
+                    search.collapseActionView();
                     Spinner s = (Spinner) item.getActionView();
                     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),R.array.filter,android.R.layout.simple_spinner_dropdown_item);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     s.setAdapter(adapter);
-
-
                     s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -126,7 +124,15 @@ public class HomeFragment extends Fragment {
         });
         //-----------X---------------toolbar----------------X------------------------------
 
+        //---------------------Drawer stuff----------------------------------------------
+        drawer = getActivity().findViewById(R.id.drawerlayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(),drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
+
+
+        //----------------------X---------X------------X-----------X------------------------
 
 
 
@@ -174,6 +180,7 @@ public class HomeFragment extends Fragment {
         DataFetcher dataFetcher = new DataFetcher(getActivity());
         dataFetcher.execute("fetchdata",s);
     }
+
 
 
 

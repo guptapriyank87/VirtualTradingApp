@@ -6,9 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:elevation="5dp"
     app:menu="@menu/top_menu"
-    app:logo="@drawable/ic_menu"
     app:title="Demo"
-    app:titleMarginStart="25dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat">
 
 </androidx.appcompat.widget.Toolbar>

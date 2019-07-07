@@ -4,6 +4,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    tools:context=".ProfileActivity"
+    android:background="@drawable/material_bg">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="176dp" />
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/card_view_background"
+                    android:elevation="5dp"
+                    android:paddingHorizontal="20dp"
+                    android:text="Shresth Dubey"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="600dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="10dp"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:elevation="5dp"
+                        android:background="@drawable/card_view_background"
+                        android:paddingHorizontal="20dp">
+                        <TextView
+                            style="@style/TextAppearance.AppCompat.Headline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"
+                            android:background=""
+                            android:text="Shresth Dubey"
+                            android:textSize="22sp"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_edit"
+                            android:layout_gravity="center_vertical|right"
+                            />
+
+                    </FrameLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

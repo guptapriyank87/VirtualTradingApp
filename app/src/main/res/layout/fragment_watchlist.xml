@@ -22,15 +22,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/frameLayout"
-                android:layout_width="match_parent"
+            <include
+                android:id="@+id/watchlist_toolbar"
+                layout="@layout/toptoolbar"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </FrameLayout>
+                android:layout_width="match_parent"
+                />
 
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
