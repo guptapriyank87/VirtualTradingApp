@@ -91,7 +91,7 @@
         android:layout_marginLeft="10dp"
         android:layout_gravity="center_horizontal"
         android:text="Sign in"
-        android:background="@drawable/button_background"
+        android:theme="@style/Theme.AppCompat"
         android:textColor="#FFFFFF"
         />
     <TextView

@@ -39,8 +39,12 @@
         <item android:title="Feeling tired?">
             <menu>
                 <item
+                    android:id="@+id/logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="Logout" />
+                <item
                     android:id="@+id/exit"
-                    android:icon="@drawable/ic_settings_white_24dp"
+                    android:icon="@drawable/ic_exit"
                     android:title="Exit" />
             </menu>
         </item>

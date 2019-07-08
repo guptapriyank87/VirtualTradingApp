@@ -145,7 +145,6 @@ public class BuySellStock extends AppCompatActivity
             status.setTextColor(getResources().getColor(R.color.design_default_color_background));
             status.setBackgroundResource(R.color.neutral);
         }
-        //TODO:apply available stock information here
         constants = new Constants(this);
         availableStocks.execute("getavi",constants.getEmail(),in.getStringExtra("companyName"));
         btnBuy.setOnClickListener(new View.OnClickListener() {

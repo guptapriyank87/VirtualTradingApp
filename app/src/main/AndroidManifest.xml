@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".FeedbackActivity"></activity>
+        <activity android:name=".ProfileActivity" />
         <activity android:name=".BuySellStock" />
         <activity android:name=".VerifyEmail" />
         <activity android:name=".ForgetPassword" />

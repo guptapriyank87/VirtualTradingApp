@@ -14,7 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.navigationwithtoolbar.productModel.Product;
 import com.google.android.material.button.MaterialButton;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -33,10 +39,6 @@ public class MainActivity extends AppCompatActivity {
     TextView signupButton;
     TextView btnForgotPassword;
     EditText etusername,etpassword;
-
-
-
-
 
 
     @Override
@@ -191,12 +193,27 @@ public class MainActivity extends AppCompatActivity {
 
                 if (loginSuccessful) {
                     //alertDialog.setMessage("Login Successful!");
+                    try {
+                        JSONObject jsonObj = new JSONObject(s);
+                        constants.setEmail(jsonObj.getString("email"));
+                        constants.setPhone(jsonObj.getString("phone"));
+                        constants.setName(jsonObj.getString("name"));
+                        constants.setGender(jsonObj.getString("gender"));
+                        constants.setDob(jsonObj.getString("dob"));
+                        String p = "";
+                        for(int k=0;k<Integer.parseInt(jsonObj.getString("password_len"));k++){
+                            p+="•";
+                        }
+                        constants.setPassword_coded(p);
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     Intent i = new Intent(context,HomeActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     //Generating SESSION_ID
                     //s = s.replace("loginsuccess","");
-                    Constants constants = new Constants(context);
-                    constants.setEmail(user);
+
                     context.startActivity(i);
                     return;
                 } else if (incorrectPassword) {
