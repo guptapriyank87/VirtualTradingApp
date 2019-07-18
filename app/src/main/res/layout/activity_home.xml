@@ -10,33 +10,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:openDrawer="start"
     >
-<LinearLayout
 
-        android:orientation="vertical"
+    <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".HomeActivity">
 
 
         <fragment
             android:id="@+id/fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            app:navGraph = "@navigation/bottom_navagation"
-            app:defaultNavHost= "true"
-            />
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/bottom_navagation" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav"
-            app:menu="@menu/bottom_menu"
-            android:elevation="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:elevation="5dp"
+            app:menu="@menu/bottom_menu">
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>
-
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -44,7 +43,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/drawer_menu"/>
+        app:menu="@menu/drawer_menu" />
+
 </androidx.drawerlayout.widget.DrawerLayout>
 
 

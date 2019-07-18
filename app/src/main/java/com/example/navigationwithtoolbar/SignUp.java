@@ -1,6 +1,7 @@
 package com.example.navigationwithtoolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -43,6 +44,8 @@ public class SignUp extends AppCompatActivity {
     Button signUp;
     String age, date, stringName, stringEmail, stringPhone, stringGender, stringDob, stringPassword;
     int d, m, y;
+    Toolbar toolbar;
+    View logo_back;
     EditText name, email, number, password, confirmPassword, otp;
     DatePickerDialog.OnDateSetListener mDateSetListener;
     RadioGroup maleFemale;
@@ -62,6 +65,14 @@ public class SignUp extends AppCompatActivity {
         password = findViewById(R.id.etrpassword);
         confirmPassword = findViewById(R.id.etrconfirmpassword);
         date = "Select Date of Birth";
+        toolbar = findViewById(R.id.signup_toolbar);
+        logo_back = toolbar.getChildAt(1);
+        logo_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         dateTextView.setOnClickListener(new View.OnClickListener() {
@@ -79,8 +90,11 @@ public class SignUp extends AppCompatActivity {
                         mDateSetListener,
                         year, month, day
                 );
+
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
+                dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setBackgroundResource(R.drawable.button_background);
+                dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setBackgroundResource(R.drawable.button_background);
             }
         });
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -95,6 +109,8 @@ public class SignUp extends AppCompatActivity {
                 dateTextView.setText(date);
                 date = year + "-" + month + "-" + dayOfMonth;
                 dateTextView.setTextSize(22);
+                stringDob = date;
+
             }
         };
         signUp.setOnClickListener(new View.OnClickListener() {
@@ -227,6 +243,12 @@ public class SignUp extends AppCompatActivity {
                     String gender = strings[4];
                     String dob = strings[5];
                     String password = strings[6];
+                    System.out.println("name "+name+
+                            "\nemail"+email+
+                            "\nphone"+phone+
+                            "\ngender"+gender+
+                            "\ndob"+dob+
+                            "\npassword"+password);
                     Log.i("status","inside the try catch");
                     URL url = new URL(register_url);
                     HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();

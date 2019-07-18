@@ -12,7 +12,7 @@ public class Constants {
     private String gender;
     private String password_coded;
     private String name;
-    private String ip ="192.168.1.3";
+    private String ip ="192.168.43.216";
 
     public String getPhone() {
         phone = sharedPreferences.getString("phone","");

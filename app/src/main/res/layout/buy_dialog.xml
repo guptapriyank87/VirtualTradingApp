@@ -41,7 +41,7 @@
             <TextView
                 android:id="@+id/BADcompanyCode"
                 style="@style/TextAppearance.AppCompat.Headline"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:text="ADANI-PORTS"
@@ -50,7 +50,7 @@
                 android:textStyle="bold" />
             <TextView
                 android:id="@+id/buyDialogCurrentPrice"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_height="wrap_content"
                 android:text="INR 420.00"
@@ -75,7 +75,8 @@
 
         <TextView
             android:id="@+id/textview5"
-            android:layout_width="160sp"
+            android:layout_marginRight="20dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Buy Quantity"
             style="@style/TextAppearance.AppCompat.Headline"
@@ -84,7 +85,7 @@
             />
         <EditText
             android:id="@+id/buyNumber"
-            android:layout_width="130sp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/values"
@@ -110,7 +111,8 @@
 
             <TextView
                 android:id="@+id/textview6"
-                android:layout_width="160sp"
+                android:layout_marginRight="20dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Debit Amount:"
                 style="@style/TextAppearance.AppCompat.Headline"
@@ -119,7 +121,7 @@
                 />
             <TextView
                 android:id="@+id/debitAmount"
-                android:layout_width="150sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="INR 0"
                 style="@style/TextAppearance.AppCompat.Headline"

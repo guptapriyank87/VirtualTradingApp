@@ -76,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
             btnForgotPassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent in = new Intent(MainActivity.this, ForgetPassword.class);
-                    startActivity(in);
+                    //TODO:apply forgot password properties here
+                    Intent i = new Intent(MainActivity.this,ForgetPassword.class);
+                    startActivity(i);
                 }
             });
             loginButton.setOnClickListener(new View.OnClickListener() {

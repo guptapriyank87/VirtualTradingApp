@@ -37,4 +37,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha06'
     implementation "org.jetbrains.anko:anko-common:0.8.3"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 }

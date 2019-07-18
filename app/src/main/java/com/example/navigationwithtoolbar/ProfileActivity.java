@@ -6,12 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ProfileActivity extends AppCompatActivity {
     TextView name,email,dob,password,gender;
@@ -33,7 +30,6 @@ public class ProfileActivity extends AppCompatActivity {
         password = findViewById(R.id.profile_password);
         gender = findViewById(R.id.profile_gender);
         phone = findViewById(R.id.profile_phone);
-        phone_edit = findViewById(R.id.profile_phone_edit);
       //  phone_confirm = findViewById(R.id.profile_phone_edit_check);
         password_edit = findViewById(R.id.profile_password_edit);
         name.setText(constants.getName());
@@ -47,23 +43,6 @@ public class ProfileActivity extends AppCompatActivity {
         password.setText(constants.getPassword_coded());
         phone.setText(constants.getPhone());
 
-
-        phone_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ProfileActivity.this, "working", Toast.LENGTH_SHORT).show();
-                if(!phone.isEnabled()){
-                    phone_edit.setBackgroundResource(R.drawable.ic_check);
-                    phone.setEnabled(true);
-                    phone.setSelection(phone.getText().length());
-                    phone.requestFocus();
-                }else{
-                    phone_edit.setBackgroundResource(R.drawable.ic_edit);
-                    phone.setEnabled(false);
-                }
-
-            }
-        });
         toolbar = findViewById(R.id.profile_toolbar);
         logo_back = toolbar.getChildAt(1);
         logo_back.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +51,5 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
 }

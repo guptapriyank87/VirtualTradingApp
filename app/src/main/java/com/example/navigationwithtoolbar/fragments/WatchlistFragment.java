@@ -1,15 +1,19 @@
 package com.example.navigationwithtoolbar.fragments;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -19,9 +23,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.navigationwithtoolbar.BuySellStock;
 import com.example.navigationwithtoolbar.Constants;
+import com.example.navigationwithtoolbar.HomeActivity;
 import com.example.navigationwithtoolbar.R;
 import com.example.navigationwithtoolbar.productModel.Product;
 import com.example.navigationwithtoolbar.productModel.ProductAdapter;
@@ -56,6 +65,8 @@ public class WatchlistFragment extends Fragment {
     private String ip;
     private Toolbar toolbar;
     private DrawerLayout drawer;
+    LinearLayout noResults,netError;
+
 
 
 
@@ -74,10 +85,14 @@ public class WatchlistFragment extends Fragment {
         ip = constants.getIp();
         productList = new ArrayList<>();
         recyclerView = v.findViewById(R.id.watchlistRecyclerView);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
+        noResults = v.findViewById(R.id.empty_watchlist);
+        netError = v.findViewById(R.id.network_error);
         swipeRefreshLayout = v.findViewById(R.id.watchlistrefreshLayout);
         toolbar = v.findViewById(R.id.watchlist_toolbar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -107,6 +122,23 @@ public class WatchlistFragment extends Fragment {
         return v;
         //return inflater.inflate(R.layout.fragment_watchlist, container, false);
     }
+    public ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            Product p = productAdapter.getlist().get(viewHolder.getAdapterPosition());
+            String rCompany_code = p.getCode();
+            //todo:here
+            DeleteFromWatchlist delete = new DeleteFromWatchlist(getContext());
+            delete.execute("delete",constants.getEmail(),rCompany_code);
+            productAdapter.getlist().remove(viewHolder.getAdapterPosition());
+            productAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+        }
+    };
     public void fetcIt(){
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -118,6 +150,7 @@ public class WatchlistFragment extends Fragment {
         });
 
     }
+
     public class WatchlistFetcher extends AsyncTask<String,String,String> {
         Context context;
         String c,p,s,cd;
@@ -205,6 +238,7 @@ public class WatchlistFragment extends Fragment {
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
+            System.out.println("epr");
             return "error";
         }
 
@@ -219,6 +253,19 @@ public class WatchlistFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String str) {
+            if (str.contains("0 results")){
+                noResults.setAlpha(1);
+                return;
+            }else if(str.equals("error")){
+                netError.setAlpha(1);
+                return;
+            }else{
+                noResults.setAlpha(0);
+                netError.setAlpha(0);
+            }
+
+
+            Log.i("str",str);
             Log.i("jason String",str);
             try {
                 JSONArray jsonArr = new JSONArray(str);
@@ -259,6 +306,105 @@ public class WatchlistFragment extends Fragment {
             context = ctx;
         }
 
+    }
+    public class DeleteFromWatchlist extends AsyncTask<String, String, String> {
+        Context context;
+        private Constants constants;
+        private String ip;
+
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String type = strings[0];
+            constants = new Constants(context);
+            ip = constants.getIp();
+            String delete_url = "http://"+ip+"/pgr/deletefromwatchlist.php";
+
+            if (type.equals("delete")){
+                try {
+                    String email = strings[1];
+                    String code = strings[2];
+                    URL url = new URL(delete_url);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+
+
+                    String post_data = URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+URLEncoder.encode("code","UTF-8")+"="+URLEncoder.encode(code,"UTF-8");
+                    Log.i("status","string post_data concatenation successful");
+
+                    bufferedWriter.write(post_data);
+                    Log.i("status","bufferedWriter.write(post_data) executed successfully");
+
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    //reading response for feedback
+                    Log.i("status","now reading feedback");
+
+
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
+                    String result = "";
+                    String line  = "";
+                    while ((line = bufferedReader.readLine())!=null){
+                        result += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                    return result;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s == null){
+                s ="networkerror";
+            }
+            try {
+                boolean success = s.contains("done");
+                boolean internalError = s.contains("error");
+                boolean networkError = s.contains("networkerror");
+
+                if (success) {
+                    Log.i("Delete status","success");
+                    return;
+                } else if (internalError) {
+                    Toast.makeText(context, "There was an internal error!\nPlease refresh and try again.", Toast.LENGTH_SHORT).show();
+                } else if (networkError) {
+                    Toast.makeText(context, "Network error!\nPlease refresh and try again.", Toast.LENGTH_SHORT).show();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        public DeleteFromWatchlist(Context ctx) {
+            context = ctx;
+        }
     }
 
 }

@@ -1,12 +1,14 @@
 package com.example.navigationwithtoolbar
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -58,13 +60,39 @@ class HomeActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 toast("about!")
             }
             R.id.exit ->{
-                toast("exit!")
+                val builder = AlertDialog.Builder(this);
+                builder.setTitle("Exit")
+                builder.setMessage("Are you sure you want to Exit?")
+                builder.setPositiveButton("YES"){dialog, which ->
+                    // Do something when user press the positive button
+                    finish()
+                }
+                builder.setNeutralButton("NO"){dialog, which ->
+                    dialog.dismiss()
+                }
+                val dialog: AlertDialog = builder.create()
+                dialog.show()
             }
             R.id.logout->{
-                //toast("logout")
-                constants.removeUser()
-                intent = Intent(applicationContext,MainActivity::class.java)
-                startActivity(intent)
+//                constants.removeUser()
+//                intent = Intent(applicationContext,MainActivity::class.java)
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//                startActivity(intent)
+                val builder = AlertDialog.Builder(this);
+                builder.setTitle("Logout")
+                builder.setMessage("Are you sure you want to logout?")
+                builder.setPositiveButton("YES"){dialog, which ->
+                    // Do something when user press the positive button
+                    constants.removeUser()
+                    intent = Intent(applicationContext,MainActivity::class.java)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                }
+                builder.setNeutralButton("NO"){dialog, which ->
+                    dialog.dismiss()
+                }
+                val dialog: AlertDialog = builder.create()
+                dialog.show()
             }
         }
         drawerlayout.closeDrawer(GravityCompat.START)

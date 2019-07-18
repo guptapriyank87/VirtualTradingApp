@@ -4,29 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUp">
+    tools:context=".SignUp"
+    android:background="@drawable/bg_border_green"
+
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/signup_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:elevation="5dp"
+        app:logo="@drawable/ic_arrow_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Register"
+        app:titleMarginStart="30dp" />
 
 
     <ScrollView
+        app:layout_constraintTop_toBottomOf="@+id/signup_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:paddingBottom="20dp"
-                android:text="Sign Up"
-                android:textColor="@color/iconColor"
-                android:textSize="26sp"
-                android:textStyle="bold" />
             <EditText
                 android:id="@+id/etrname"
                 android:layout_width="match_parent"
@@ -35,8 +42,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/black_textview_bg"
+                android:elevation="5dp"
                 android:ems="10"
                 android:hint="Enter Name"
                 android:inputType="text"
@@ -45,6 +53,7 @@
                 android:textColor="#FFFFFF"
                 android:textColorHint="#BCFFF9F9"
                 android:textColorLink="#00574B" />
+
             <EditText
                 android:id="@+id/etremail"
                 android:layout_width="match_parent"
@@ -53,8 +62,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/black_textview_bg"
+                android:elevation="5dp"
                 android:ems="10"
                 android:hint="Enter Email"
                 android:inputType="textEmailAddress"
@@ -63,6 +73,7 @@
                 android:textColor="#FFFFFF"
                 android:textColorHint="#BCFFF9F9"
                 android:textColorLink="#00574B" />
+
             <EditText
                 android:id="@+id/etrphone"
                 android:layout_width="match_parent"
@@ -71,13 +82,14 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/black_textview_bg"
+                android:digits="0123456789"
+                android:elevation="5dp"
                 android:ems="13"
                 android:hint="Enter your phone number"
                 android:inputType="phone"
                 android:maxLength="10"
-                android:digits="0123456789"
                 android:padding="10dp"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
@@ -125,8 +137,9 @@
                 android:layout_weight="1"
                 android:padding="10dp"
                 android:text="Select Date of Birth"
-                android:textColor="#000000"
+                style="@style/TextAppearance.AppCompat.Headline"
                 android:textSize="22sp" />
+
             <EditText
                 android:id="@+id/etrpassword"
                 android:layout_width="match_parent"
@@ -135,8 +148,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/black_textview_bg"
+                android:elevation="5dp"
                 android:ems="10"
                 android:hint="Set a password"
                 android:inputType="textPassword"
@@ -146,6 +160,7 @@
                 android:textColor="#FFFFFF"
                 android:textColorHint="#BCFFF9F9"
                 android:textColorLink="#00574B" />
+
             <EditText
                 android:id="@+id/etrconfirmpassword"
                 android:layout_width="match_parent"
@@ -156,6 +171,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/black_textview_bg"
+                android:elevation="5dp"
                 android:ems="10"
                 android:hint="Confirm password"
                 android:inputType="textPassword"
@@ -170,22 +186,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign Up"
-                android:theme="@style/Theme.MaterialComponents.DayNight"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/design_default_color_surface"
-                android:background="@drawable/button_bg"
-                />
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/verifyIntent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="to Verify"
-                android:theme="@style/Theme.MaterialComponents.DayNight"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/design_default_color_surface"
-                android:background="@drawable/button_bg"
                 />
         </LinearLayout>
     </ScrollView>

@@ -35,9 +35,16 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:ems="10"
+            android:elevation="5dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/darker_gray"
             android:layout_marginTop="10dp"
+            android:background="@drawable/edittext_bg_grey"
+            android:padding="7dp"
             android:hint="Enter your email address"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:drawableLeft="@drawable/ic_profile"
+            />
 
 
         <TextView
@@ -53,14 +60,11 @@
             android:textColor="#113011"
             android:textSize="20sp" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            >
+
 
 
             <EditText
+                android:layout_marginTop="10dp"
                 android:id="@+id/etpassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,20 +72,27 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:ems="10"
+                android:background="@drawable/edittext_bg_grey"
+                android:padding="7dp"
+                android:textColorHint="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:hint="Enter your password"
+                android:drawableLeft="@drawable/ic_lock_black_24dp"
                 android:inputType="textPassword" />
-            <TextView
-                android:id="@+id/btnforgetpassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_horizontal"
-                android:layout_marginEnd="10dp"
-                android:text="Forgot?"
-                android:layout_marginTop="10dp"
-                android:textColor="#114E80"
-                android:textSize="18sp"
-                android:textStyle="italic" />
-        </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/btnforgetpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_horizontal"
+        android:layout_marginEnd="15dp"
+        android:text="Forgot?"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_marginTop="5dp"
+        android:textColor="#002BC9"
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnlogin"
         android:layout_width="match_parent"

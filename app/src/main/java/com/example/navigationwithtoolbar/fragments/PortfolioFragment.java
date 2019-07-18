@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -60,6 +61,8 @@ public class PortfolioFragment extends Fragment {
     private String ip;
     private Toolbar toolbar;
     private DrawerLayout drawer;
+    LinearLayout noResults,netError;
+
     public PortfolioFragment() {
         // Required empty public constructor
     }
@@ -82,6 +85,8 @@ public class PortfolioFragment extends Fragment {
                 fetcIt();
             }
         });
+        noResults = v.findViewById(R.id.empty_portfolio);
+        netError = v.findViewById(R.id.portfolio_network_error);
 
         //-----------------toolbar stuff--------------------------------------
         toolbar.setTitle("Portfolio");
@@ -214,6 +219,16 @@ public class PortfolioFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String str) {
+            if (str.contains("no data")){
+                noResults.setAlpha(1);
+                return;
+            }else if(str.equals("error")){
+                netError.setAlpha(1);
+                return;
+            }else{
+                noResults.setAlpha(0);
+                netError.setAlpha(0);
+            }
             Log.i("jason String",str);
             try {
                 System.out.println("source code"+str);

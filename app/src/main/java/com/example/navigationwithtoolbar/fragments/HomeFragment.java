@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -18,17 +19,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.SearchView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 
 import com.example.navigationwithtoolbar.BuySellStock;
 import com.example.navigationwithtoolbar.Constants;
@@ -65,11 +65,10 @@ public class HomeFragment extends Fragment {
     private View v;
     private Constants constants;
     private String ip;
-    private ImageView error;
     private Toolbar toolbar;
     String r="";
     private DrawerLayout drawer;
-
+    LinearLayout noResults,netError;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -81,18 +80,19 @@ public class HomeFragment extends Fragment {
         constants = new Constants(getActivity());
         toolbar = v.findViewById(R.id.toolbar);
         ip = constants.getIp();
-        error = v.findViewById(R.id.networkerror);
         productList = new ArrayList<>();
         recyclerView = v.findViewById(R.id.homeRecyclerView);
         recyclerView.setHasFixedSize(true);
         swipeRefreshLayout = v.findViewById(R.id.refreshLayout);
-
-
+        noResults = v.findViewById(R.id.no_search_results);
+        netError = v.findViewById(R.id.homeFragment_network_error);
+        drawer = getActivity().findViewById(R.id.drawerlayout);
         //-----------------------toolbar stuff------------------------
 
         toolbar.setTitle("Nifty500");
         final MenuItem spin = toolbar.getMenu().findItem(R.id.filter);
         final MenuItem search = toolbar.getMenu().findItem(R.id.search);
+        final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) search.getActionView();
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -100,7 +100,24 @@ public class HomeFragment extends Fragment {
                 if(id == R.id.search){
                     spin.collapseActionView();
                     //TODO:Apply search settings.
-                    Toast.makeText(getContext(), "pop", Toast.LENGTH_SHORT).show();
+
+                   searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                       @Override
+                       public boolean onQueryTextSubmit(String query) {
+                           return false;
+                       }
+
+                       @Override
+                       public boolean onQueryTextChange(String newText) {
+                           try{
+                               productAdapter.getFilter().filter(newText);
+                           }catch (Exception e){
+                               e.printStackTrace();
+                           }
+                           return false;
+                       }
+                   });
+
                 }else if(id == R.id.filter){
                     search.collapseActionView();
                     Spinner s = (Spinner) item.getActionView();
@@ -129,8 +146,6 @@ public class HomeFragment extends Fragment {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(),drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-
 
         //----------------------X---------X------------X-----------X------------------------
 
@@ -276,7 +291,17 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String str) {
-            Log.i("jason String",str);
+
+            if (str.equals("0 results")){
+                //noResults.setAlpha(1);
+                return;
+            }else if(str.equals("error")){
+                netError.setAlpha(1);
+                return;
+            }else{
+                noResults.setAlpha(0);
+                netError.setAlpha(0);
+            }
 
             try {
                 JSONArray jsonArr = new JSONArray(str);

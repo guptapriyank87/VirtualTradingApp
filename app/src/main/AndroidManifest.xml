@@ -12,11 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FeedbackActivity"></activity>
+        <activity android:name=".ForgetPassword"></activity>
+        <activity android:name=".FeedbackActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".BuySellStock" />
         <activity android:name=".VerifyEmail" />
-        <activity android:name=".ForgetPassword" />
         <activity android:name=".SignUp" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".MainActivity">

@@ -5,6 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VerifyEmail">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/verify_email_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:elevation="5dp"
+        app:logo="@drawable/ic_arrow_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Buy/Sell Stock"
+        app:titleMarginStart="30dp"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -46,8 +58,7 @@
             android:theme="@style/Theme.MaterialComponents.DayNight"
             android:layout_marginTop="110dp"
             android:layout_gravity="center"
-            android:textColor="@color/design_default_color_surface"
-            android:background="@drawable/button_bg"
+            style="@style/Theme.AppCompat.DayNight"
             />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

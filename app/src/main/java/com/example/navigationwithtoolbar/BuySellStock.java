@@ -1,10 +1,12 @@
 package com.example.navigationwithtoolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -51,6 +53,9 @@ public class BuySellStock extends AppCompatActivity
     Context ctx;
     Constants constants;
 
+    Toolbar toolbar;
+    View logo_back;
+
     //buy dialog declaration
     View buyView ;
     EditText buyNumber ;
@@ -59,6 +64,7 @@ public class BuySellStock extends AppCompatActivity
     TextView debitAmount,BADCompanyCode ;
     Double prc;
     TextView dailogCompanyName,dailogCompanyPrice,dailogCompanyCode;
+
 
 
     ////sell dialog declaration
@@ -77,6 +83,17 @@ public class BuySellStock extends AppCompatActivity
         setContentView(R.layout.activity_buy_sell_stock);
         ctx = this;
         final AvailableStocks availableStocks = new AvailableStocks(this);
+
+
+        toolbar = findViewById(R.id.buySell_toolbar);
+        logo_back = toolbar.getChildAt(1);
+        logo_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         //Buy dialog initialisation
         buyView = getLayoutInflater().inflate(R.layout.buy_dialog,null);
@@ -100,7 +117,7 @@ public class BuySellStock extends AppCompatActivity
         availableSellStocks = sellView.findViewById(R.id.SADAvailableStocks);
 
 
-        Intent in = getIntent();
+        final Intent in = getIntent();
         companyName = findViewById(R.id.companyName);
         companyCode = findViewById(R.id.BScompanyCode);
         btnBuy = findViewById(R.id.btnBSS_Buy);
@@ -273,6 +290,7 @@ public class BuySellStock extends AppCompatActivity
                 watchlist.execute("add",constants.getEmail(),cd);
             }
         });
+
     }
     public class BuyStock extends AsyncTask<String, String, String> {
         Context context;
@@ -545,8 +563,10 @@ public class BuySellStock extends AppCompatActivity
                     return result;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
+                    finish();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    finish();
                 }
             }
             return null;
@@ -565,10 +585,17 @@ public class BuySellStock extends AppCompatActivity
         @Override
         protected void onPostExecute(String s) {
             //available stocks will be received here in s.
-            s = s.replace("INR ","");
-            avaiStocks.setText(s);
-            Log.i("avi",s);
-            avi = Integer.parseInt(s);
+            if (s != null){
+                s = s.replace("INR ","");
+                avaiStocks.setText(s);
+                Log.i("avi",s);
+                avi = Integer.parseInt(s);
+            }else{
+                avi = 0;
+                Toast.makeText(context, "there was a network error", Toast.LENGTH_SHORT).show();
+            }
+
+
         }
         public AvailableStocks(Context ctx) {
             context = ctx;

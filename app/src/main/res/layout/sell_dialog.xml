@@ -21,11 +21,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="start"
         android:layout_marginTop="30dp">
         <TextView
             android:id="@+id/SellDialogCompanyName"
-            android:layout_width="160dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="Demo Company name that is very big in size"
 
@@ -39,7 +39,7 @@
             android:orientation="vertical">
             <TextView
                 android:id="@+id/SADcompanyCode"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_height="wrap_content"
                 android:text="ADANI-PORTS"
@@ -50,7 +50,7 @@
                 />
             <TextView
                 android:id="@+id/sellDialogCurrentPrice"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_height="wrap_content"
                 android:text="INR 420.00"
@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="start"
         android:layout_marginTop="20dp"
         >
         <LinearLayout
@@ -81,7 +81,8 @@
 
             <TextView
                 android:id="@+id/textview9"
-                android:layout_width="160sp"
+                android:layout_width="140sp"
+                android:layout_marginRight="10dp"
                 android:layout_height="wrap_content"
                 android:text="Available Stocks:"
                 style="@style/TextAppearance.AppCompat.Headline"
@@ -90,7 +91,7 @@
                 />
             <TextView
                 android:id="@+id/SADAvailableStocks"
-                android:layout_width="150sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20"
                 style="@style/TextAppearance.AppCompat.Headline"
@@ -104,12 +105,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="start">
 
         <TextView
             android:id="@+id/textview5"
             android:layout_width="140sp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:text="Sell Quantity"
             style="@style/TextAppearance.AppCompat.Headline"
             android:textSize="16sp"
@@ -117,7 +119,7 @@
             />
         <EditText
             android:id="@+id/SADSellNumber"
-            android:layout_width="130sp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/values"
@@ -132,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="start"
         android:layout_marginTop="40dp"
         >
         <LinearLayout
@@ -143,8 +145,9 @@
 
             <TextView
                 android:id="@+id/textview6"
-                android:layout_width="160sp"
+                android:layout_width="140sp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:text="Total Sell Amount:"
                 style="@style/TextAppearance.AppCompat.Headline"
                 android:textSize="16sp"
@@ -152,7 +155,7 @@
                 />
             <TextView
                 android:id="@+id/sellAmount"
-                android:layout_width="150sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="INR 0"
                 style="@style/TextAppearance.AppCompat.Headline"
