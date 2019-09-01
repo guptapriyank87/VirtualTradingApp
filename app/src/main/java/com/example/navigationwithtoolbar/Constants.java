@@ -19,7 +19,6 @@ public class Constants {
         phone = sharedPreferences.getString("phone","");
         return phone;
     }
-
     public void setPhone(String phone) {
         this.phone = phone;
         sharedPreferences.edit().putString("phone",phone).commit();

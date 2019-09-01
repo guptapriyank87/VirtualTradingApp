@@ -61,7 +61,7 @@ public class FeedbackActivity extends AppCompatActivity {
                      String rating = String.valueOf(ratingBar.getRating());
                      String r = review.getText().toString();
                      RatingSubmission ratingSubmission = new RatingSubmission(getApplication());
-                     ratingSubmission.execute(rating,r);
+                     ratingSubmission.execute("submit",rating,r);
                  }else{
                      Toast.makeText(FeedbackActivity.this, "Please give a rating", Toast.LENGTH_SHORT).show();
                  }
@@ -135,7 +135,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            return null;
+            return "error";
         }
 
         @Override
@@ -151,13 +151,9 @@ public class FeedbackActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            if(s == null){
-                s = "";
-            }
+            Log.i("source",s);
             boolean submitSuccessful = s.contains("submitsuccess");
             boolean entryExist = s.contains("entryexist");
-
-
             if (submitSuccessful) {
                 Toast.makeText(context, "Thank you for submitting the feedback! ", Toast.LENGTH_SHORT).show();
                 finish();

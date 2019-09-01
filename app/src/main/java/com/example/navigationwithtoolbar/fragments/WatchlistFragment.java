@@ -423,7 +423,6 @@ public class WatchlistFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-
         public DeleteFromWatchlist(Context ctx) {
             context = ctx;
         }
