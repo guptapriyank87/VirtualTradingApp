@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.navigationwithtoolbar.R;
@@ -21,7 +20,7 @@ import com.example.navigationwithtoolbar.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> implements Filterable {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> implements Filterable{
 
     private Context mCtx;
     private List<Product> productList;
@@ -111,7 +110,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             }else{
                 String filterPatern = constraint.toString().toLowerCase().trim();
                 for(Product product:productListFull){
-                    if(product.getCompanyName().toLowerCase().contains(filterPatern)){
+                    if(product.getCompanyName().toLowerCase().contains(filterPatern) || product.getCode().toLowerCase().contains(filterPatern) ){
                         filteredList.add(product);
                     }
                 }

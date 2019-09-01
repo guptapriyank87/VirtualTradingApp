@@ -11,7 +11,7 @@
 
 
     <FrameLayout
-        android:background="@android:color/holo_green_light"
+        android:background="@android:color/holo_blue_light"
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -63,14 +63,6 @@
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
-                <ImageButton
-                    android:id="@+id/profile_password_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_edit"
-                    android:layout_marginHorizontal="15dp"
-                    android:layout_gravity="center_vertical"
-                    />
             </LinearLayout>
 
 
@@ -103,7 +95,7 @@
                     android:layout_gravity="left"
                     android:background="@color/noColor"
                     android:text="demo@gmail.com"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="#00534F"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </FrameLayout>
@@ -139,7 +131,7 @@
                     android:inputType="phone"
                     android:maxLength="10"
                     android:text="1234567890"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="#00534F"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -182,7 +174,7 @@
                     android:layout_gravity="start"
                     android:background="@color/noColor"
                     android:text="31/Oct/1998"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="#00534F"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -219,7 +211,7 @@
                     android:enabled="false"
                     android:inputType="textPassword"
                     android:text="1234567890"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="#00534F"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -254,7 +246,7 @@
                     android:background="@color/noColor"
                     android:enabled="false"
                     android:text="whatever"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="#00534F"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 

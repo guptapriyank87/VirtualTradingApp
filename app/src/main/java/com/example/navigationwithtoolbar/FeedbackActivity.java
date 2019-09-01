@@ -82,7 +82,7 @@ public class FeedbackActivity extends AppCompatActivity {
             String type = strings[0];
             constants = new Constants(context);
             ip = constants.getIp();
-            String submit_url = "http://"+ip+"/pgr/submitrating.php";
+            String submit_url = "http://"+ip+"/pgr/review.php";
 
             if (type.equals("submit")){
                 try {
@@ -155,12 +155,16 @@ public class FeedbackActivity extends AppCompatActivity {
                 s = "";
             }
             boolean submitSuccessful = s.contains("submitsuccess");
+            boolean entryExist = s.contains("entryexist");
 
 
             if (submitSuccessful) {
                 Toast.makeText(context, "Thank you for submitting the feedback! ", Toast.LENGTH_SHORT).show();
                 finish();
                 return;
+            }else if(entryExist){
+                Toast.makeText(context, "Your entry already exists! ", Toast.LENGTH_SHORT).show();
+
             }else{
                 Toast.makeText(context, "There was an unknown error, please try again!", Toast.LENGTH_SHORT).show();
             }

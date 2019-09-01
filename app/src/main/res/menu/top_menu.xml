@@ -9,7 +9,6 @@
         android:title="Filter"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.widget.Spinner"
-
         android:icon="@drawable/ic_filter" />
 
     <item
@@ -19,5 +18,4 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:icon="@drawable/ic_search_black_24dp"/>
 </group>
-
 </menu>

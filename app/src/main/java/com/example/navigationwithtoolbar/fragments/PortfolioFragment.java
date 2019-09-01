@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.navigationwithtoolbar.BuySellStock;
@@ -46,6 +47,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.navigationwithtoolbar.productModel.PortfolioProductAdapter.round;
 
 
 /**
@@ -62,7 +64,8 @@ public class PortfolioFragment extends Fragment {
     private Toolbar toolbar;
     private DrawerLayout drawer;
     LinearLayout noResults,netError;
-
+    private TextView totalProfitLoss,totalInvestment;
+    float tinvist=0,tprofitloss=0;
     public PortfolioFragment() {
         // Required empty public constructor
     }
@@ -83,10 +86,14 @@ public class PortfolioFragment extends Fragment {
             @Override
             public void onRefresh() {
                 fetcIt();
+                tinvist = 0;
+                tprofitloss = 0;
             }
         });
         noResults = v.findViewById(R.id.empty_portfolio);
         netError = v.findViewById(R.id.portfolio_network_error);
+        totalProfitLoss = v.findViewById(R.id.totalgainorloss);
+        totalInvestment = v.findViewById(R.id.totalinv);
 
         //-----------------toolbar stuff--------------------------------------
         toolbar.setTitle("Portfolio");
@@ -131,12 +138,16 @@ public class PortfolioFragment extends Fragment {
             String type = strings[0];
             String getPortfolio_url = "http://"+ip+"/pgr/portfolio.php";
             portfolioProductList = new ArrayList<>();
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(true);
-                }
-            });
+            try {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
             if (type.equals("getportfolio")){
                 try {
                     String email = strings[1];
@@ -174,37 +185,53 @@ public class PortfolioFragment extends Fragment {
                     inputStream.close();
                     httpURLConnection.disconnect();
                     System.out.println(result);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                     return result;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                 }
             }
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
+            try {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
             return "error";
         }
 
@@ -224,6 +251,12 @@ public class PortfolioFragment extends Fragment {
                 return;
             }else if(str.equals("error")){
                 netError.setAlpha(1);
+                portfolioProductList.clear();
+                portfolioProductAdapter =new PortfolioProductAdapter(getActivity(),portfolioProductList,null);
+                recyclerView.setAdapter(portfolioProductAdapter);
+                totalInvestment.setText("Total Investment: --");
+                totalProfitLoss.setText("Total Gain/Loss: --");
+
                 return;
             }else{
                 noResults.setAlpha(0);
@@ -231,20 +264,43 @@ public class PortfolioFragment extends Fragment {
             }
             Log.i("jason String",str);
             try {
+                final float tinv = 0,tpl = 0;
+
                 System.out.println("source code"+str);
                 JSONArray jsonArr = new JSONArray(str);
-                for (int i = 0; i < jsonArr.length(); i++)
-                {
+                for (int i = 0; i < jsonArr.length(); i++) {
                     JSONObject jsonObj = jsonArr.getJSONObject(i);
                     c = jsonObj.getString("companyName");
                     p = jsonObj.getString("currentPrice");
                     s = jsonObj.getString("status");
                     cd = jsonObj.getString("code");
                     avi = jsonObj.getString("stockAvailable");
-                    worth = String.valueOf(Float.parseFloat(p.replace("INR ",""))*Float.parseFloat(avi));
+                    worth = String.valueOf(Float.parseFloat(p.replace("INR ", "")) * Float.parseFloat(avi));
                     System.out.println(worth);
                     investment = jsonObj.getString("effectivePrice");
-                    portfolioProductList.add(new PortfolioProduct(c,"INR "+p,s,cd,avi,worth,investment));
+                    if (!avi.equals("0")) {
+                        portfolioProductList.add(new PortfolioProduct(c, "INR " + p, s, cd, avi, worth, investment));
+                    }
+                }
+
+                for(int i=0;i<portfolioProductList.toArray().length;i++){
+
+                    Log.i("inv-"+i,portfolioProductList.get(i).getInvestment());
+                    Log.i("avi-"+i,portfolioProductList.get(i).getAvailableStocks());
+                    float W = Float.parseFloat(portfolioProductList.get(i).getWorth());
+                    float I = Float.parseFloat(portfolioProductList.get(i).getInvestment());
+                    if(Integer.parseInt(portfolioProductList.get(i).getAvailableStocks()) == 0){
+                        I = 0;
+                        W = 0;
+                    }
+                    tinvist += I;
+                    if(I<W){
+                        //profit
+                        tprofitloss+=(W-I);
+                    }else if(W<I){
+                        //loss
+                        tprofitloss-=(I-W);
+                    }
                 }
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -263,6 +319,26 @@ public class PortfolioFragment extends Fragment {
                         };
                         portfolioProductAdapter =new PortfolioProductAdapter(getActivity(),portfolioProductList,onCardListner);
                         recyclerView.setAdapter(portfolioProductAdapter);
+
+                    }
+                });
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        totalInvestment.setText("Total Investment:"+String.format("%.0f",round(tinvist,2)));
+//                        Log.i("inv",String.valueOf(portfolioProductAdapter.getTinv()));
+//                        Log.i("profit or loss",String.valueOf(portfolioProductAdapter.getTpl()));
+
+                        if(tprofitloss>0.1){
+                            totalProfitLoss.setText("Total Gain:"+tprofitloss);
+                            totalProfitLoss.setTextColor(getResources().getColor(R.color.strongBuy));
+                        }else if(tprofitloss<-0.1){
+                            totalProfitLoss.setText("Total Loss:"+tprofitloss);
+                            totalProfitLoss.setTextColor(getResources().getColor(R.color.strongSell));
+                        }else{
+                            totalProfitLoss.setText("Total Gain/Loss:"+portfolioProductAdapter.getTpl());
+                        }
                     }
                 });
 

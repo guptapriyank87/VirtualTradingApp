@@ -22,7 +22,15 @@ public class PortfolioProductAdapter extends RecyclerView.Adapter<PortfolioProdu
     private Context mCtx;
     private List<PortfolioProduct> portfolioProductList;
     private OnCardListner onCardListner;
+    public float tinv = 0;
+    public float tpl = 0;
+    public float getTinv() {
+        return tinv;
+    }
 
+    public float getTpl() {
+        return tpl;
+    }
 
     public PortfolioProductAdapter(Context mCtx, List<PortfolioProduct> portfolioProductList, OnCardListner onCardListner) {
         this.mCtx = mCtx;
@@ -39,7 +47,6 @@ public class PortfolioProductAdapter extends RecyclerView.Adapter<PortfolioProdu
         PortfolioProductViewHolder holder = new PortfolioProductViewHolder(view,onCardListner);
         return holder;
     }
-
     @Override
     public void onBindViewHolder(@NonNull PortfolioProductViewHolder portfolioProductViewHolder, int i) {
         PortfolioProduct portfolioProduct = portfolioProductList.get(i);
@@ -48,46 +55,48 @@ public class PortfolioProductAdapter extends RecyclerView.Adapter<PortfolioProdu
         portfolioProductViewHolder.tStatus.setText(portfolioProduct.getStatus());
         portfolioProductViewHolder.tCode.setText(portfolioProduct.getCode());
         portfolioProductViewHolder.tavi.setText(portfolioProduct.getAvailableStocks());
-
         float I,A,W,P,PP,C;
 
         I = round(Float.parseFloat(portfolioProduct.getInvestment()),2);
-        if (I<0){
+        if (I<0) {
             I = 0;
         }
-
+        tinv += I;
+        System.out.println(tinv);
         A = round(Float.parseFloat(portfolioProduct.getAvailableStocks()),2);
         W = round(Float.parseFloat(portfolioProduct.getWorth()),2);
         C = round(Float.parseFloat(portfolioProduct.getPrice().replace("INR","")),2);
 
-        System.out.println("I:"+portfolioProduct.getInvestment()+"\n"+"A:"+A+"\n"+"W:"+W+"\n"+"C:"+C);
+//        System.out.println("I:"+portfolioProduct.getInvestment()+"\n"+"A:"+A+"\n"+"W:"+W+"\n"+"C:"+C);
 
         if (W>I){
             //profit
             P = W-I;
+            tpl+=P;
             PP = P/I*100;
             PP = round(PP,2);
-            portfolioProductViewHolder.tposition.setText("+"+P);
+            portfolioProductViewHolder.tposition.setText("+"+round(P,2));
             portfolioProductViewHolder.tposition.setTextColor(Color.parseColor("#00CC00"));
-            portfolioProductViewHolder.tInvestment.setText(String.valueOf(I));
-            portfolioProductViewHolder.tworth.setText(W+"(+"+PP+"%)");
+            portfolioProductViewHolder.tInvestment.setText(String.format("%.0f",round(I,2)));
+            portfolioProductViewHolder.tworth.setText(String.format("%.0f",round(W,2))+"(+"+round(PP,2)+"%)");
             portfolioProductViewHolder.tworth.setTextColor(Color.parseColor("#00CC00"));
         }else if (I>W){
             //Loss
             P = I-W;
+            tpl -= P;
             PP = P/I*100;
             PP = round(PP,2);
-            portfolioProductViewHolder.tposition.setText("-"+P);
+            portfolioProductViewHolder.tposition.setText("-"+round(P,2));
             portfolioProductViewHolder.tposition.setTextColor(Color.parseColor("#CC0000"));
-            portfolioProductViewHolder.tInvestment.setText(String.valueOf(I));
-            portfolioProductViewHolder.tworth.setText(W+"(-"+PP+"%)");
+            portfolioProductViewHolder.tInvestment.setText(String.format("%.0f",round(I,2)));
+            portfolioProductViewHolder.tworth.setText(String.format("%.0f",round(W,2))+"(-"+round(PP,2)+"%)");
             portfolioProductViewHolder.tworth.setTextColor(Color.parseColor("#CC0000"));
         }else{
             //No profit no loss
             P = 0;
-            portfolioProductViewHolder.tposition.setText(String.valueOf(P));
-            portfolioProductViewHolder.tInvestment.setText(String.valueOf(I));
-            portfolioProductViewHolder.tworth.setText(W+"("+0+"%)");
+            portfolioProductViewHolder.tposition.setText(String.valueOf(round(P,2) ));
+            portfolioProductViewHolder.tInvestment.setText(String.format("%.0f",round(I,2)));
+            portfolioProductViewHolder.tworth.setText(String.format("%.0f",round(W,2))+"("+0+"%)");
         }
 
         if (portfolioProduct.getStatus().equals("Strong Buy")){
@@ -122,7 +131,6 @@ public class PortfolioProductAdapter extends RecyclerView.Adapter<PortfolioProdu
             tworth = itemView.findViewById(R.id.portWorth);
             tInvestment = itemView.findViewById(R.id.investment);
             tposition = itemView.findViewById(R.id.position);
-
             itemView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,RecyclerView.LayoutParams.WRAP_CONTENT));
             itemView.setOnClickListener(this);
             this.onCardListner = onCardListner;

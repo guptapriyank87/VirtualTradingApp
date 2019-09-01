@@ -41,6 +41,7 @@ public class SignUp extends AppCompatActivity {
 
     private String TAG = "SignUpActivity";
     TextView dateTextView;
+    Constants constants;
     Button signUp;
     String age, date, stringName, stringEmail, stringPhone, stringGender, stringDob, stringPassword;
     int d, m, y;
@@ -73,8 +74,7 @@ public class SignUp extends AppCompatActivity {
                 finish();
             }
         });
-
-
+        constants = new Constants(this);
         dateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,7 +228,7 @@ public class SignUp extends AppCompatActivity {
         AlertDialog alertDialog;
 
         Boolean userExist=false;
-        String ip = "192.168.43.216";
+        String ip = constants.getIp();
         @Override
         protected String doInBackground(String... strings) {
             String type = strings[0];
@@ -300,7 +300,7 @@ public class SignUp extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            return null;
+            return "error";
         }
 
         @Override
@@ -316,13 +316,19 @@ public class SignUp extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+            if(s.equals("error")){
+                Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show();
+                return;
+            }
             try {
                boolean insertSuccessful = s.contains("insertsuccessful");
                 boolean insertUnsuccessful = s.contains("insertunsuccessful");
                 boolean userExist = s.contains("userExist");
 
                 if (insertSuccessful) {
-                    context.startActivity(new Intent(SignUp.this,VerifyEmail.class));
+                    Intent i = new Intent(getApplication(),VerifyEmail.class);
+                    i.putExtra("email",email.getText().toString());
+                    startActivity(i);
                 } else if (insertUnsuccessful) {
                     alertDialog.setMessage("Sorry, Something went wrong!");
                 } else if (userExist) {

@@ -15,9 +15,9 @@ public class ProfileActivity extends AppCompatActivity {
     EditText phone;
     Toolbar toolbar;
 
-    ImageButton password_edit,phone_edit,phone_confirm;;
+
     Constants constants;
-    WebView webView;
+
     View logo_back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
         gender = findViewById(R.id.profile_gender);
         phone = findViewById(R.id.profile_phone);
       //  phone_confirm = findViewById(R.id.profile_phone_edit_check);
-        password_edit = findViewById(R.id.profile_password_edit);
+
         name.setText(constants.getName());
         email.setText(constants.getEmail());
         dob.setText(constants.getDob());

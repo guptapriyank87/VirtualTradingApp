@@ -22,8 +22,6 @@ class HomeActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
 
     private lateinit var navControler :NavController
     private lateinit var constants: Constants
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -35,13 +33,11 @@ class HomeActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             R.id.profile ->{
-               // toast("profile!")
+//                toast("profile!")
                 intent = Intent(applicationContext,ProfileActivity::class.java)
                 startActivity(intent)
             }
-            R.id.settings ->{
-                toast("settings")
-            }
+            
             R.id.feedback ->{
                // toast("feedback!")
                 intent = Intent(applicationContext,FeedbackActivity::class.java)
@@ -57,10 +53,12 @@ class HomeActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 //toast("share!")
             }
             R.id.about ->{
-                toast("about!")
+                //toast("about!")
+                val aboutIntent = Intent(applicationContext,AboutActivity::class.java)
+                startActivity(aboutIntent)
             }
             R.id.exit ->{
-                val builder = AlertDialog.Builder(this);
+                val builder = AlertDialog.Builder(this)
                 builder.setTitle("Exit")
                 builder.setMessage("Are you sure you want to Exit?")
                 builder.setPositiveButton("YES"){dialog, which ->
@@ -72,6 +70,19 @@ class HomeActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 }
                 val dialog: AlertDialog = builder.create()
                 dialog.show()
+            }
+            R.id.report_bug->{
+//                val emailIntent = Intent(Intent.ACTION_SEND)
+//                emailIntent.setType("text/plain")
+//                startActivity(emailIntent)
+                try {
+                    val i = Intent(Intent.ACTION_VIEW,Uri.parse("mailto:" + "shresthdubey98@gmail.com"))
+                    i.putExtra(Intent.EXTRA_SUBJECT, "Bug Report")
+                    i.putExtra(Intent.EXTRA_TEXT,"Please write your bug below:")
+                    startActivity(i)
+                }catch (e: Exception){
+
+                }
             }
             R.id.logout->{
 //                constants.removeUser()

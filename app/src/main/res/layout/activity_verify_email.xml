@@ -18,10 +18,11 @@
         app:title="Buy/Sell Stock"
         app:titleMarginStart="30dp"/>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:orientation="vertical"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
@@ -29,36 +30,75 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            app:srcCompat="@drawable/email_300dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="150dp"
-            android:alpha="0.9"
-            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:layout_gravity="center"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             android:textAlignment="center"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:lineSpacingExtra="15dp"
             style="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="#582020"
-            android:text="A verification link has been sent to your email address \n Please verify your email to log in"/>
+            android:textColor="#2196F3"
+            android:layout_marginVertical="20dp"
+            android:text="A verification code has been sent to your email.\nPlease Enter the code to verify your account"/>
+        <EditText
+            android:id="@+id/otpEdittext"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@android:color/holo_blue_light"
+            android:textColor="@android:color/holo_blue_light"
+            android:layout_marginVertical="20dp"
+            android:textAlignment="center"
+            android:maxLength="6"
+            android:digits="0123456789"
+            android:inputType="number"
+            android:textSize="30sp"
+            android:hint="OTP"
+            />
+        <ProgressBar
+            android:id="@+id/verify_email_progressbar"
+            android:layout_width="wrap_content"
+            android:alpha="0"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:indeterminateTint="@android:color/holo_red_dark"
+            />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnVGoBackToLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="Verify"
             android:theme="@style/Theme.MaterialComponents.DayNight"
-            android:layout_marginTop="110dp"
             android:layout_gravity="center"
+            android:layout_marginVertical="20dp"
             style="@style/Theme.AppCompat.DayNight"
             />
-    </FrameLayout>
+        <TextView
+            android:id="@+id/send_code_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:lineSpacingExtra="15dp"
+            android:enabled="true"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="#3A0808"
+            android:layout_marginVertical="20dp"
+            android:text="Did not receive code? Send again."/>
+        <ProgressBar
+            android:id="@+id/verify_email_sendagain_progressbar"
+            android:layout_width="wrap_content"
+            android:alpha="0"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:indeterminateTint="@android:color/holo_red_dark"
+            />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

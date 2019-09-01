@@ -9,9 +9,11 @@
     >
 
     <FrameLayout
+        android:id="@+id/framelayout_fragmentportfolio"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/totalframe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -28,23 +30,18 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 />
-
-            <FrameLayout
-                android:id="@+id/frameLayout"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </FrameLayout>
-
-
+                android:layout_height="match_parent"
+                android:orientation="vertical">
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/refreshLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+                android:layout_above="@+id/total_layout"
+                android:layout_alignParentTop="true"
+                >
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/portfolioRecyclerView"
@@ -53,7 +50,39 @@
                     tools:listitem="@layout/portfolio_list_layout">
 
                 </androidx.recyclerview.widget.RecyclerView>
+
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <LinearLayout
+                    android:id="@+id/total_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_border_green"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/totalgainorloss"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Gain/Loss:0"
+                        android:padding="5dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        />
+                    <TextView
+                        android:id="@+id/totalinv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Investment:0"
+                        android:padding="5dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
 
         </LinearLayout>
         <LinearLayout
@@ -101,8 +130,17 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
     </FrameLayout>
+    <LinearLayout
+        android:id="@+id/totalframe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/framelayout_fragmentportfolio">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="asdhaklsdh"/>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

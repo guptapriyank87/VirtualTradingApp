@@ -1,13 +1,8 @@
 package com.example.navigationwithtoolbar.fragments;
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -16,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,21 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-
 import com.example.navigationwithtoolbar.BuySellStock;
 import com.example.navigationwithtoolbar.Constants;
 import com.example.navigationwithtoolbar.R;
 import com.example.navigationwithtoolbar.productModel.Product;
 import com.example.navigationwithtoolbar.productModel.ProductAdapter;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -69,6 +57,7 @@ public class HomeFragment extends Fragment {
     String r="";
     private DrawerLayout drawer;
     LinearLayout noResults,netError;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -118,6 +107,7 @@ public class HomeFragment extends Fragment {
                        }
                    });
 
+
                 }else if(id == R.id.filter){
                     search.collapseActionView();
                     Spinner s = (Spinner) item.getActionView();
@@ -152,12 +142,17 @@ public class HomeFragment extends Fragment {
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                fetcIt(r);
-            }
-        });
+        try {
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    fetcIt(r);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         fetcIt("All");
 
         //return inflater.inflate(R.layout.fragment_home, container, false);
@@ -195,11 +190,6 @@ public class HomeFragment extends Fragment {
         DataFetcher dataFetcher = new DataFetcher(getActivity());
         dataFetcher.execute("fetchdata",s);
     }
-
-
-
-
-
     public class DataFetcher extends AsyncTask<String,String,String> {
         Context context;
         String c,p,s,cd;
@@ -212,12 +202,16 @@ public class HomeFragment extends Fragment {
             System.out.println("filter is:"+filter);
             String fetchData_url = "http://"+ip+"/pgr/fetchdata.php";
             productList = new ArrayList<>();
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(true);
-                }
-            });
+            try {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
             if (type.equals("fetchdata")){
                 try {
                     URL url = new URL(fetchData_url);
@@ -246,37 +240,53 @@ public class HomeFragment extends Fragment {
                     inputStream.close();
                     httpURLConnection.disconnect();
                     System.out.println(result);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                     return result;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                 }
             }
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
+            try {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
             return "error";
         }
 
@@ -297,6 +307,9 @@ public class HomeFragment extends Fragment {
                 return;
             }else if(str.equals("error")){
                 netError.setAlpha(1);
+                productList.clear();
+                productAdapter =new ProductAdapter(getActivity(),productList,null);
+                recyclerView.setAdapter(productAdapter);
                 return;
             }else{
                 noResults.setAlpha(0);

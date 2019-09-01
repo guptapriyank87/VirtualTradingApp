@@ -5,20 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.Preference;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.navigationwithtoolbar.productModel.Product;
-import com.google.android.material.button.MaterialButton;
 
-import org.json.JSONArray;
+
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -32,40 +30,88 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
-    TextView signupButton;
+    TextView signupButton,warning;
     TextView btnForgotPassword;
     EditText etusername,etpassword;
+    Boolean currentTimeCheck,currentDayCheck;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Constants constants = new Constants(MainActivity.this);
-        if (constants.getEmail()!=""){
-            Intent in = new Intent(MainActivity.this,HomeActivity.class);
-            in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            this.overridePendingTransition(0,0);
-            startActivity(in);
-        }else {
+
+        Date currentTimestrap = Calendar.getInstance().getTime();
+        String nowtime = new SimpleDateFormat("H:mm:ss").format(currentTimestrap);
+        String nowDay = new SimpleDateFormat("E").format(currentTimestrap);
+        nowDay = "mon";
+        nowtime ="23:00:00";
+        String fromTime = "09:15:00";
+        String toTime = "15:30:00";
+        //timeCheck  
+        currentTimeCheck = timeCheck(nowtime,fromTime,toTime);
+        currentDayCheck = checkDay(nowDay);
+
+        System.out.println("a:"+currentTimeCheck+"\n"+"b:"+currentDayCheck);
+        if (currentDayCheck || (!currentDayCheck && currentTimeCheck)){
+            if (constants.getEmail()!=""){
+                Intent in = new Intent(MainActivity.this,HomeActivity.class);
+                in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                this.overridePendingTransition(0,0);
+                startActivity(in);
+            }else {
+                setContentView(R.layout.activity_main);
+                signupButton = findViewById(R.id.btnsignup);
+                etusername = findViewById(R.id.etemail);
+                etpassword = findViewById(R.id.etpassword);
+                loginButton = findViewById(R.id.btnlogin);
+                btnForgotPassword = findViewById(R.id.btnforgetpassword);
+                loginButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent in = new Intent(MainActivity.this, HomeActivity.class);
+                        startActivity(in);
+                    }
+                });
+                signupButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent in = new Intent(MainActivity.this, SignUp.class);
+                        startActivity(in);
+                    }
+                });
+                btnForgotPassword.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO:apply forgot password properties here
+                        Intent i = new Intent(MainActivity.this,ForgetPassword.class);
+                        startActivity(i);
+                    }
+                });
+                loginButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        logIn();
+                    }
+                });
+            }
+
+        }else{
             setContentView(R.layout.activity_main);
-
-
             signupButton = findViewById(R.id.btnsignup);
             etusername = findViewById(R.id.etemail);
             etpassword = findViewById(R.id.etpassword);
+            warning = findViewById(R.id.warning_text);
             loginButton = findViewById(R.id.btnlogin);
             btnForgotPassword = findViewById(R.id.btnforgetpassword);
-            loginButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent in = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(in);
-                }
-            });
             signupButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -81,12 +127,10 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-            loginButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    logIn();
-                }
-            });
+            loginButton.setVisibility(View.GONE);
+            warning.setVisibility(View.VISIBLE);
+            etusername.setEnabled(false);
+            etpassword.setEnabled(false);
         }
 
     }
@@ -103,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    public static class BackgroundWorker extends AsyncTask<String, String, String> {
+    public class BackgroundWorker extends AsyncTask<String, String, String> {
         Context context;
         AlertDialog alertDialog;
         String user = "nouser";
@@ -186,10 +230,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+            Log.i("ssss",s);
             try {
                 boolean loginSuccessful = s.contains("loginsuccess");
                 boolean incorrectPassword = s.contains("incorrectpassword");
                 boolean userNotFound = s.contains("userdoesnotexist");
+                boolean vneed = s.contains("vneed");
                 Log.i("SessionId",s);
 
                 if (loginSuccessful) {
@@ -222,6 +268,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.i("info",s);
                 } else if (userNotFound) {
                     alertDialog.setMessage("User does not exist!");
+                } else if(vneed){
+                    Intent i = new Intent(getApplication(),VerifyEmail.class);
+                    i.putExtra("email",user);
+                    startActivity(i);
                 } else {
                     alertDialog.setMessage("Unknown error!");
                     Log.i("error", s);
@@ -235,6 +285,30 @@ public class MainActivity extends AppCompatActivity {
 
         public BackgroundWorker(Context ctx) {
             context = ctx;
+        }
+    }
+    public boolean timeCheck(String now,String from,String to){
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            Date date_from = formatter.parse(from);
+            Date date_to = formatter.parse(to);
+            Date dateNow = formatter.parse(now);
+            if (date_from.before(dateNow) && date_to.after(dateNow)) {
+                return false;
+            }else{
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkDay(String day){
+        if (day.toLowerCase().equals("sat") || day.toLowerCase().equals("sun")){
+            return true;
+        }else {
+            return false;
         }
     }
 }

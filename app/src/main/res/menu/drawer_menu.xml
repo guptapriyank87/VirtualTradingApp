@@ -11,10 +11,7 @@
                     android:id="@+id/profile"
                     android:icon="@drawable/ic_profile"
                     android:title="Profile" />
-                <item
-                    android:id="@+id/settings"
-                    android:icon="@drawable/ic_settings_white_24dp"
-                    android:title="Settings" />
+
             </menu>
         </item>
 
@@ -32,6 +29,10 @@
                     android:id="@+id/about"
                     android:icon="@drawable/ic_about"
                     android:title="About" />
+                <item
+                    android:id="@+id/report_bug"
+                    android:icon="@drawable/ic_bug"
+                    android:title="Report bug"/>
             </menu>
         </item>
 

@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,7 +46,7 @@ import java.util.zip.Inflater;
 public class BuySellStock extends AppCompatActivity
 {
 
-    public TextView companyName,price,status,companyCode,avaiStocks;
+    public TextView companyName,price,status,companyCode,avaiStocks,worth;
     public int avi;
     String c,p,s,cd;
     AlertDialog placeBuyOrder,placeSellOrder;
@@ -62,7 +63,7 @@ public class BuySellStock extends AppCompatActivity
     Button buyButton ;
     Button buyCancleButton;
     TextView debitAmount,BADCompanyCode ;
-    Double prc;
+    Float prc;
     TextView dailogCompanyName,dailogCompanyPrice,dailogCompanyCode;
 
 
@@ -94,7 +95,6 @@ public class BuySellStock extends AppCompatActivity
             }
         });
 
-
         //Buy dialog initialisation
         buyView = getLayoutInflater().inflate(R.layout.buy_dialog,null);
         buyNumber  = buyView.findViewById(R.id.buyNumber);
@@ -118,6 +118,7 @@ public class BuySellStock extends AppCompatActivity
 
 
         final Intent in = getIntent();
+        worth = findViewById(R.id.BSSworth);
         companyName = findViewById(R.id.companyName);
         companyCode = findViewById(R.id.BScompanyCode);
         btnBuy = findViewById(R.id.btnBSS_Buy);
@@ -132,7 +133,7 @@ public class BuySellStock extends AppCompatActivity
         p = in.getStringExtra("price");
         p = p.replace("INR ","");
         cd = in.getStringExtra("code");
-        prc = Double.parseDouble(p);
+        prc = Float.parseFloat(p);
         s = in.getStringExtra("status");
         Log.i("strings","\n"+in.getStringExtra("companyName")
                                 +"\n"+in.getStringExtra("price")
@@ -183,14 +184,20 @@ public class BuySellStock extends AppCompatActivity
                             s = s+"0";
                         }
                         Log.i("Textchange",s+"  "+start+"  "+before+"  "+count);
-                        Double nbr = Double.parseDouble(s.toString());
-                        Double amt = nbr*prc;
-                        String amount = amt.toString();
+                        float nbr = Float.parseFloat(s.toString());
+                        float amt = nbr*prc;
+                        String amount = String.valueOf(round(amt,2));
                         debitAmount.setText("INR "+amount);
-                        if(nbr>0){
+                        if(nbr>0 && nbr<101){
                             buyButton.setEnabled(true);
                         }else{
                             buyButton.setEnabled(false);
+                        }
+                        if (nbr>100){
+                            buyNumber.setError("you can only buy 100 or less stocks at a time.");
+                            buyNumber.setTextColor(getResources().getColor(R.color.strongSell));
+                        }else{
+                            buyNumber.setTextColor(getResources().getColor(R.color.values));
                         }
                     }
 
@@ -236,9 +243,9 @@ public class BuySellStock extends AppCompatActivity
                             s = s+"0";
                         }
                         Log.i("Textchange",s+"  "+start+"  "+before+"  "+count);
-                        Double nbr = Double.parseDouble(s.toString());
-                        Double amt = prc*nbr;
-                        String amount = amt.toString();
+                        float nbr = Float.parseFloat(s.toString());
+                        float amt = prc*nbr;
+                        String amount = String.valueOf(round(amt,2));
                         sellAmount.setText("INR "+amount);
                         if(Integer.parseInt(s.toString()) != 0) {
                             if (avi >= Integer.parseInt(s.toString())) {
@@ -586,7 +593,11 @@ public class BuySellStock extends AppCompatActivity
         protected void onPostExecute(String s) {
             //available stocks will be received here in s.
             if (s != null){
+
                 s = s.replace("INR ","");
+                float w = Float.parseFloat(s)*Float.parseFloat(p);
+                double wRoundOff = Math.round(w * 100.0) / 100.0;
+                worth.setText("INR "+ round((float)wRoundOff,2));
                 avaiStocks.setText(s);
                 Log.i("avi",s);
                 avi = Integer.parseInt(s);
@@ -710,5 +721,9 @@ public class BuySellStock extends AppCompatActivity
             context = ctx;
         }
     }
-
+    public float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+    }
 }

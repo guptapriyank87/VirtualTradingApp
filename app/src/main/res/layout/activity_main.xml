@@ -93,18 +93,37 @@
         android:textColor="#002BC9"
         android:textSize="18sp"
         android:textStyle="bold|italic" />
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnlogin"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_gravity="center_horizontal"
-        android:text="Sign in"
-        android:theme="@style/Theme.AppCompat"
-        android:textColor="#FFFFFF"
-        />
+        android:layout_height="wrap_content">
+        <TextView
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="10dp"
+            android:id="@+id/warning_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="please login before 9:15am or after 3:30pm"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textColor="@android:color/holo_red_light"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnlogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Sign in"
+            android:theme="@style/Theme.AppCompat"
+            android:textColor="#FFFFFF"
+            />
+    </FrameLayout>
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"

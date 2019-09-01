@@ -148,7 +148,6 @@ public class WatchlistFragment extends Fragment {
                 dataFetcher.execute("fetchdata",constants.getEmail());
             }
         });
-
     }
 
     public class WatchlistFetcher extends AsyncTask<String,String,String> {
@@ -163,12 +162,16 @@ public class WatchlistFragment extends Fragment {
             String type = strings[0];
             String getWatchlist_url = "http://"+ip+"/pgr/getwatchlist.php";
             productList = new ArrayList<>();
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(true);
-                }
-            });
+            try {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
             if (type.equals("fetchdata")){
                 try {
                     String email = strings[1];
@@ -207,37 +210,53 @@ public class WatchlistFragment extends Fragment {
                     inputStream.close();
                     httpURLConnection.disconnect();
                     System.out.println(result);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                     return result;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                 }
             }
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
+            try {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
             System.out.println("epr");
             return "error";
         }
@@ -258,6 +277,9 @@ public class WatchlistFragment extends Fragment {
                 return;
             }else if(str.equals("error")){
                 netError.setAlpha(1);
+                productList.clear();
+                productAdapter =new ProductAdapter(getActivity(),productList,null);
+                recyclerView.setAdapter(productAdapter);
                 return;
             }else{
                 noResults.setAlpha(0);
