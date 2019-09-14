@@ -15,6 +15,7 @@ import com.example.navigationwithtoolbar.R;
 import com.example.navigationwithtoolbar.productModel.PortfolioProduct;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class PortfolioProductAdapter extends RecyclerView.Adapter<PortfolioProductAdapter.PortfolioProductViewHolder>{
@@ -74,11 +75,13 @@ public class PortfolioProductAdapter extends RecyclerView.Adapter<PortfolioProdu
             P = W-I;
             tpl+=P;
             PP = P/I*100;
-            PP = round(PP,2);
+            DecimalFormat df = new DecimalFormat("0.00##");
+            String result = df.format(PP);
+            //PP = round(PP,2);
             portfolioProductViewHolder.tposition.setText("+"+round(P,2));
             portfolioProductViewHolder.tposition.setTextColor(Color.parseColor("#00CC00"));
             portfolioProductViewHolder.tInvestment.setText(String.format("%.0f",round(I,2)));
-            portfolioProductViewHolder.tworth.setText(String.format("%.0f",round(W,2))+"(+"+round(PP,2)+"%)");
+            portfolioProductViewHolder.tworth.setText(String.format("%.0f",round(W,2))+"(+"+result+"%)");
             portfolioProductViewHolder.tworth.setTextColor(Color.parseColor("#00CC00"));
         }else if (I>W){
             //Loss

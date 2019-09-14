@@ -43,6 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
+import static com.example.navigationwithtoolbar.productModel.PortfolioProductAdapter.round;
+
 public class BuySellStock extends AppCompatActivity
 {
 
@@ -186,7 +188,7 @@ public class BuySellStock extends AppCompatActivity
                         Log.i("Textchange",s+"  "+start+"  "+before+"  "+count);
                         float nbr = Float.parseFloat(s.toString());
                         float amt = nbr*prc;
-                        String amount = String.valueOf(round(amt,2));
+                        String amount = String.format("%.0f",round(amt,2));
                         debitAmount.setText("INR "+amount);
                         if(nbr>0 && nbr<101){
                             buyButton.setEnabled(true);
@@ -245,7 +247,7 @@ public class BuySellStock extends AppCompatActivity
                         Log.i("Textchange",s+"  "+start+"  "+before+"  "+count);
                         float nbr = Float.parseFloat(s.toString());
                         float amt = prc*nbr;
-                        String amount = String.valueOf(round(amt,2));
+                        String amount = String.format("%.0f",round(amt,2));
                         sellAmount.setText("INR "+amount);
                         if(Integer.parseInt(s.toString()) != 0) {
                             if (avi >= Integer.parseInt(s.toString())) {
@@ -597,7 +599,7 @@ public class BuySellStock extends AppCompatActivity
                 s = s.replace("INR ","");
                 float w = Float.parseFloat(s)*Float.parseFloat(p);
                 double wRoundOff = Math.round(w * 100.0) / 100.0;
-                worth.setText("INR "+ round((float)wRoundOff,2));
+                worth.setText("INR "+ String.format("%.0f",round(w,2)));
                 avaiStocks.setText(s);
                 Log.i("avi",s);
                 avi = Integer.parseInt(s);
