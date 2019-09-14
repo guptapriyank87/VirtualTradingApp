@@ -14,7 +14,7 @@ public class Constants {
     private String name;
     private String ip ="trading.praedicofinance.com";
 //    private String ip ="192.168.1.6";
-
+//    commit check
     public String getPhone() {
         phone = sharedPreferences.getString("phone","");
         return phone;
